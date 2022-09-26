@@ -47,8 +47,8 @@ const Home = () => {
     if (bananaPrice && eData) {
         let eventData = JSON.parse(eData);
 
-        return <div>
-            <h2>Configuration for runs:</h2>
+        return <div className="container justify-content-center mt-3">
+            <h2 >Configuration for runs:</h2>
             <Formik
                 initialValues={{
                     fuelRodRun: false,
@@ -172,21 +172,22 @@ const Home = () => {
                         <option value="8">8-9</option>
                         <option value="20">10-20</option>
                     </Select>
-                    <br/>
-                    <button type="submit">Calculate</button>
+                    <button type="submit" className="btn btn-secondary">Calculate</button>
                 </Form>
             </Formik>
-            <div>
+            <div className="my-2">
                 <h2>Resulting chances for one run:</h2>
                 {Object.keys(results).length !== 0 &&
-                    <div>
-                        <div>Embattle Common: {results.EmbComm}% chance</div>
-                        <div>Embattle Rare: {results.EmbRare}% chance</div>
-                        <div>Embattle Epic: {results.EmbEpic}% chance</div>
-                        <div>Embattle Legendary: {results.EmbLege}% chance</div>
-                        <div>WL Voucher: {results.WhitelistV}% chance</div>
-                        <div>Shredz: {results.Shredz}% chance</div>
-                        <div>Golden Ticket: {results.GoldenTicket}% chance</div>
+                    <div id="results">
+                        <div><b>Embattle Common: </b>{results.EmbComm}% chance</div>
+                        <div><b>Embattle Rare: </b>{results.EmbRare}% chance</div>
+                        <div><b>Embattle Epic: </b>{results.EmbEpic}% chance</div>
+                        <div><b>Embattle Legendary: </b>{results.EmbLege}% chance</div>
+                        <div><b>WL Voucher: </b>{results.WhitelistV}% chance</div>
+                        <div><b>Rainbow Crystal: </b>{results.Rainbow}% chance</div>
+                        <div><b>Promethean Relic: </b>{results.Promethean}% chance</div>
+                        <div><b>Shredz: </b>{results.Shredz}% chance</div>
+                        <div><b>Golden Ticket: </b>{results.GoldenTicket}% chance</div>
                     </div>
                 }
 
@@ -194,8 +195,9 @@ const Home = () => {
             <br/>
             <hr/>
             <div>
-                <h3>Prices:<button>Toggle</button> </h3>
-                <div className="d-none">
+                <h3>Change prices:<button className="btn btn-secondary" onClick={togglePrices}>Toggle</button> </h3>
+                <div id="prices">
+                    <div>Prices are not used yet in the calculations, will be in a future version.</div>
                     <Formik
                         initialValues={{
                             nanaPrice: bananaPrice,
@@ -218,7 +220,7 @@ const Home = () => {
                             />
                             <br/>
                             <br/>
-                            <button type="submit">Set my own Banana price</button>
+                            <button type="submit" className="btn btn-secondary">Set my own Banana price</button>
                         </Form>
                     </Formik>
                     <br/>
@@ -318,7 +320,7 @@ const Home = () => {
                             />
                             <br/>
                             <br/>
-                            <button type="submit">Set my own loot prices</button>
+                            <button type="submit" className="btn btn-secondary">Set my own loot prices</button>
                         </Form>
                     </Formik>
                 </div>
@@ -329,5 +331,13 @@ const Home = () => {
     return <div>Loading...</div>
 }
 
+const togglePrices = () => {
+    var x = document.getElementById("prices");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
 
 export default Home;

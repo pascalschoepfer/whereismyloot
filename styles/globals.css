@@ -24,3 +24,8 @@ a {
     background: black;
   }
 }
+
+select, label, input, button {
+  margin-right: .2vw;
+  margin-bottom: .3vh;
+}
