@@ -25,9 +25,13 @@ a {
   }
 }
 
-select, label, input, button {
+select, label, input {
   margin-right: .2vw;
   margin-bottom: .3vh;
+}
+
+button {
+  margin: .2vw;
 }
 
 #prices {
