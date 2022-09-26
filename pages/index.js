@@ -47,155 +47,193 @@ const Home = () => {
     if (bananaPrice && eData) {
         let eventData = JSON.parse(eData);
 
-        return <div className="container justify-content-center mt-3">
-            <h2 >Configuration for runs:</h2>
-            <Formik
-                initialValues={{
-                    fuelRodRun: false,
-                    charmz: 0,
-                    teamSize: 1,
-                    teamLevel: 1,
-                    highestLevelKong: 1,
-                }}
-                validationSchema={Yup.object({
-                    fuelRodRun: Yup.boolean(),
-                    charmz: Yup.number(),
-                    teamSize: Yup.number(),
-                    teamLevel: Yup.number(),
-                    highestLevelKong: Yup.number(),
-                })}
-                onSubmit={(values, {setSubmitting}) => {
-                    setTimeout(() => {
-                        console.log(eventData)
-                        let resultsFromCalc = {
-                            "Kongium": 0,
-                            "Exp": 0,
-                            "Cyber": 0,
-                            "Rainbow": 0,
-                            "Promethean": 0,
-                            "EmbComm": 0,
-                            "EmbRare": 0,
-                            "EmbEpic": 0,
-                            "EmbLege": 0,
-                            "WhitelistV": 0,
-                            "Shredz": 0,
-                            "GoldenTicket": 0,
-                        }
-                        eventData
-                            .filter(e => values.fuelRodRun || e.eventType !== "Rod")
-                            .filter(e => Number(values.charmz) >= e.charmReq)
-                            .filter(e => Number(values.teamSize) >= e.teamSizeReq)
-                            .filter(e => Number(values.teamLevel) >= e.teamLvlReq)
-                            .filter(e => Number(values.highestLevelKong) >= e.lvlReq)
-                            .forEach(e => {
-                                switch (e.rewardType) {
-                                    case "Kongium":
-                                        resultsFromCalc.Kongium += e.chance * e.rewardAmount;
-                                        break;
-                                    case "Exp":
-                                        resultsFromCalc.Exp += e.chance * e.rewardAmount;
-                                        break;
-                                    case "Cyber":
-                                        resultsFromCalc.Cyber += e.chance * e.rewardAmount;
-                                        break;
-                                    case "Rainbow":
-                                        resultsFromCalc.Rainbow += e.chance * e.rewardAmount;
-                                        break;
-                                    case "Promethean":
-                                        resultsFromCalc.Promethean += e.chance * e.rewardAmount;
-                                        break;
-                                    case "EmbComm":
-                                        resultsFromCalc.EmbComm += e.chance * e.rewardAmount;
-                                        break;
-                                    case "EmbRare":
-                                        resultsFromCalc.EmbRare += e.chance * e.rewardAmount;
-                                        break;
-                                    case "EmbEpic":
-                                        resultsFromCalc.EmbEpic += e.chance * e.rewardAmount;
-                                        break;
-                                    case "EmbLege":
-                                        resultsFromCalc.EmbLege += e.chance * e.rewardAmount;
-                                        break;
-                                    case "WhitelistV":
-                                        resultsFromCalc.WhitelistV += e.chance * e.rewardAmount;
-                                        break;
-                                    case "Shredz":
-                                        resultsFromCalc.Shredz += e.chance * e.rewardAmount;
-                                        break;
-                                    case "GoldenTicket":
-                                        resultsFromCalc.GoldenTicket += e.chance * e.rewardAmount;
-                                        break;
+        return <div className="container justify-content-center mt-3 d-flex">
+            <div className="container col-8">
+                <h2>Configuration</h2>
+                <div className="container">
+                    <Formik
+                        initialValues={{
+                            fuelRodRun: false,
+                            charmz: 0,
+                            teamSize: 1,
+                            teamLevel: 1,
+                            highestLevelKong: 1,
+                        }}
+                        validationSchema={Yup.object({
+                            fuelRodRun: Yup.boolean(),
+                            charmz: Yup.number(),
+                            teamSize: Yup.number(),
+                            teamLevel: Yup.number(),
+                            highestLevelKong: Yup.number(),
+                        })}
+                        onSubmit={(values, {setSubmitting}) => {
+                            setTimeout(() => {
+                                console.log(eventData)
+                                let resultsFromCalc = {
+                                    "Kongium": 0,
+                                    "Exp": 0,
+                                    "Cyber": 0,
+                                    "Rainbow": 0,
+                                    "Promethean": 0,
+                                    "EmbComm": 0,
+                                    "EmbRare": 0,
+                                    "EmbEpic": 0,
+                                    "EmbLege": 0,
+                                    "WhitelistV": 0,
+                                    "Shredz": 0,
+                                    "GoldenTicket": 0,
                                 }
-                            })
-                        setResults(resultsFromCalc)
+                                eventData
+                                    .filter(e => values.fuelRodRun || e.eventType !== "Rod")
+                                    .filter(e => Number(values.charmz) >= e.charmReq)
+                                    .filter(e => Number(values.teamSize) >= e.teamSizeReq)
+                                    .filter(e => Number(values.teamLevel) >= e.teamLvlReq)
+                                    .filter(e => Number(values.highestLevelKong) >= e.lvlReq)
+                                    .forEach(e => {
+                                        switch (e.rewardType) {
+                                            case "Kongium":
+                                                resultsFromCalc.Kongium += e.chance * e.rewardAmount;
+                                                break;
+                                            case "Exp":
+                                                resultsFromCalc.Exp += e.chance * e.rewardAmount;
+                                                break;
+                                            case "Cyber":
+                                                resultsFromCalc.Cyber += e.chance * e.rewardAmount;
+                                                break;
+                                            case "Rainbow":
+                                                resultsFromCalc.Rainbow += e.chance * e.rewardAmount;
+                                                break;
+                                            case "Promethean":
+                                                resultsFromCalc.Promethean += e.chance * e.rewardAmount;
+                                                break;
+                                            case "EmbComm":
+                                                resultsFromCalc.EmbComm += e.chance * e.rewardAmount;
+                                                break;
+                                            case "EmbRare":
+                                                resultsFromCalc.EmbRare += e.chance * e.rewardAmount;
+                                                break;
+                                            case "EmbEpic":
+                                                resultsFromCalc.EmbEpic += e.chance * e.rewardAmount;
+                                                break;
+                                            case "EmbLege":
+                                                resultsFromCalc.EmbLege += e.chance * e.rewardAmount;
+                                                break;
+                                            case "WhitelistV":
+                                                resultsFromCalc.WhitelistV += e.chance * e.rewardAmount;
+                                                break;
+                                            case "Shredz":
+                                                resultsFromCalc.Shredz += e.chance * e.rewardAmount;
+                                                break;
+                                            case "GoldenTicket":
+                                                resultsFromCalc.GoldenTicket += e.chance * e.rewardAmount;
+                                                break;
+                                        }
+                                    })
+                                resultsFromCalc.inputs = values;
+                                setResults(resultsFromCalc)
+                                setSubmitting(false);
+                            }, 100);
+                        }}
+                    >
+                        <Form>
+                            <Checkbox label="Fuel Rod Run" name="fuelRodRun">
+                                Using fuel rods for runs.
+                            </Checkbox>
 
-                        setSubmitting(false);
-                    }, 100);
-                }}
-            >
-                <Form>
-                    <Checkbox label="Fuel Rod Run" name="fuelRodRun">
-                        Using fuel rods for runs.
-                    </Checkbox>
+                            <Select label="Charmz" name="charmz">
+                                <option value={0}>None</option>
+                                <option value={1}>Cyber Fragment</option>
+                                <option value={2}>Rainbow Crystal</option>
+                                <option value={3}>Promethean Relic</option>
+                            </Select>
 
-                    <Select label="Charmz" name="charmz">
-                        <option value={0}>None</option>
-                        <option value={1}>Cyber Fragment</option>
-                        <option value={2}>Rainbow Crystal</option>
-                        <option value={3}>Promethean Relic</option>
-                    </Select>
+                            <Select label="Team Size" name="teamSize">
+                                {[...Array(5)].map((x, i) =>
+                                    <option key={i + 1} value={i + 1}>{i + 1}</option>
+                                )}
+                            </Select>
 
-                    <Select label="Team Size" name="teamSize">
-                        {[...Array(5)].map((x, i) =>
-                            <option key={i + 1} value={i + 1}>{i + 1}</option>
-                        )}
-                    </Select>
+                            <Select label="Team Level (combined)" name="teamLevel">
+                                <option value="5">1-5</option>
+                                <option value="7">6-7</option>
+                                <option value="9">8-9</option>
+                                <option value="14">10-14</option>
+                                <option value="15">15</option>
+                                <option value="19">16-19</option>
+                                <option value="29">20-29</option>
+                                <option value="34">30-34</option>
+                                <option value="35">35+</option>
+                            </Select>
 
-                    <Select label="Team Level (combined)" name="teamLevel">
-                        <option value="5">1-5</option>
-                        <option value="7">6-7</option>
-                        <option value="9">8-9</option>
-                        <option value="14">10-14</option>
-                        <option value="15">15</option>
-                        <option value="19">16-19</option>
-                        <option value="29">20-29</option>
-                        <option value="34">30-34</option>
-                        <option value="35">35+</option>
-                    </Select>
+                            <Select label="Level of highest Kong" name="highestLevelKong">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="4">3-4</option>
+                                <option value="6">5-6</option>
+                                <option value="7">7</option>
+                                <option value="8">8-9</option>
+                                <option value="20">10-20</option>
+                            </Select>
+                            <button type="submit" className="btn btn-secondary">Calculate</button>
+                        </Form>
+                    </Formik>
+                </div>
+                <div className="my-2">
+                    <h2>Resulting chances</h2>
+                    {Object.keys(results).length !== 0 &&
+                        <div id="results" className="container d-flex justify-content-between">
+                            <div>
+                                <h5>Single run: </h5>
+                                <hr/>
+                                <div><b>Embattle Common: </b>{results.EmbComm.toFixed(3)}% chance</div>
+                                <div><b>Embattle Rare: </b>{results.EmbRare.toFixed(3)}% chance</div>
+                                <div><b>Embattle Epic: </b>{results.EmbEpic.toFixed(3)}% chance</div>
+                                <div><b>Embattle Legendary: </b>{results.EmbLege.toFixed(3)}% chance</div>
+                                <div><b>WL Voucher: </b>{results.WhitelistV.toFixed(3)}% chance</div>
+                                <div><b>Rainbow Crystal: </b>{results.Rainbow.toFixed(3)}% chance</div>
+                                <div><b>Promethean Relic: </b>{results.Promethean.toFixed(3)}% chance</div>
+                                <div><b>Shredz: </b>{results.Shredz.toFixed(3)}% chance</div>
+                                <div><b>Golden Ticket: </b>{results.GoldenTicket.toFixed(3)}% chance</div>
+                            </div>
+                            {
+                                (results.inputs.fuelRodRun) ?
+                                    <div className="col-6">
+                                        <h5>30 fuel rod runs (full charm)</h5>
+                                        <hr/>
+                                        <div><b>Embattle Common: </b>{(30*results.EmbComm).toFixed(3)}% chance</div>
+                                        <div><b>Embattle Rare: </b>{(30*results.EmbRare).toFixed(3)}% chance</div>
+                                        <div><b>Embattle Epic: </b>{(30*results.EmbEpic).toFixed(3)}% chance</div>
+                                        <div><b>Embattle Legendary: </b>{(30*results.EmbLege).toFixed(3)}% chance</div>
+                                        <div><b>WL Voucher: </b>{(30*results.WhitelistV).toFixed(3)}% chance</div>
+                                        <div><b>Rainbow Crystal: </b>{(30*results.Rainbow).toFixed(3)}% chance</div>
+                                        <div><b>Promethean Relic: </b>{(30*results.Promethean).toFixed(3)}% chance</div>
+                                        <div><b>Shredz: </b>{(30*results.Shredz).toFixed(3)}% chance</div>
+                                        <div><b>Golden Ticket: </b>{(30*results.GoldenTicket).toFixed(3)}% chance</div>
+                                    </div>
+                                    :
+                                    <div className="col-6">
+                                        <h5>50 banana runs (full charm)</h5>
+                                        <hr/>
+                                        <div><b>Embattle Common: </b>{(50*results.EmbComm).toFixed(3)}% chance</div>
+                                        <div><b>Embattle Rare: </b>{(50*results.EmbRare).toFixed(3)}% chance</div>
+                                        <div><b>Embattle Epic: </b>{(50*results.EmbEpic).toFixed(3)}% chance</div>
+                                        <div><b>Embattle Legendary: </b>{(50*results.EmbLege).toFixed(3)}% chance</div>
+                                        <div><b>WL Voucher: </b>{(50*results.WhitelistV).toFixed(3)}% chance</div>
+                                        <div><b>Rainbow Crystal: </b>{(50*results.Rainbow).toFixed(3)}% chance</div>
+                                        <div><b>Promethean Relic: </b>{(50*results.Promethean).toFixed(3)}% chance</div>
+                                        <div><b>Shredz: </b>{(50*results.Shredz).toFixed(3)}% chance</div>
+                                        <div><b>Golden Ticket: </b>{(50*results.GoldenTicket).toFixed(3)}% chance</div>
+                                    </div>
+                            }
+                        </div>
+                    }
 
-                    <Select label="Level of highest Kong" name="highestLevelKong">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="4">3-4</option>
-                        <option value="6">5-6</option>
-                        <option value="7">7</option>
-                        <option value="8">8-9</option>
-                        <option value="20">10-20</option>
-                    </Select>
-                    <button type="submit" className="btn btn-secondary">Calculate</button>
-                </Form>
-            </Formik>
-            <div className="my-2">
-                <h2>Resulting chances for one run:</h2>
-                {Object.keys(results).length !== 0 &&
-                    <div id="results">
-                        <div><b>Embattle Common: </b>{results.EmbComm}% chance</div>
-                        <div><b>Embattle Rare: </b>{results.EmbRare}% chance</div>
-                        <div><b>Embattle Epic: </b>{results.EmbEpic}% chance</div>
-                        <div><b>Embattle Legendary: </b>{results.EmbLege}% chance</div>
-                        <div><b>WL Voucher: </b>{results.WhitelistV}% chance</div>
-                        <div><b>Rainbow Crystal: </b>{results.Rainbow}% chance</div>
-                        <div><b>Promethean Relic: </b>{results.Promethean}% chance</div>
-                        <div><b>Shredz: </b>{results.Shredz}% chance</div>
-                        <div><b>Golden Ticket: </b>{results.GoldenTicket}% chance</div>
-                    </div>
-                }
-
+                </div>
             </div>
-            <br/>
-            <hr/>
-            <div>
-                <h3>Change prices:<button className="btn btn-secondary" onClick={togglePrices}>Toggle</button> </h3>
+            <div className="container col-5">
+                <h3>Change prices:
+                    <button className="btn btn-secondary" onClick={togglePrices}>Toggle</button>
+                </h3>
                 <div id="prices">
                     <div>Prices are not used yet in the calculations, will be in a future version.</div>
                     <Formik
