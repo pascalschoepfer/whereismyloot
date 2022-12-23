@@ -34,6 +34,10 @@ button {
   margin: .2vw;
 }
 
+#container-levels {
+  padding-right: 0;
+}
+
 #prices {
   display: none;
 }

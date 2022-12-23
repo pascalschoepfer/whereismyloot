@@ -9,21 +9,22 @@ import Checkbox from "../components/checkbox";
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const constants = Object.freeze({
-    BANANA_PER_RUN: 0.4
+    BANANA_PER_RUN: 0.4,
+    KONGIUM_PER_LEVEL: [3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5]
 })
 
 const Home = () => {
     const [bananaPrice, setBananaPrice] = useState(0)
-    const [cyberPrice, setCyberPrice] = useState(0.005)
-    const [rainbowPrice, setRainbowPrice] = useState(0.05)
-    const [promPrice, setPromPrice] = useState(0.8)
-    const [embCommPrice, setEmbCommPrice] = useState(0.005)
+    const [cyberPrice, setCyberPrice] = useState(0.003)
+    const [rainbowPrice, setRainbowPrice] = useState(0.025)
+    const [promPrice, setPromPrice] = useState(0.5)
+    const [embCommPrice, setEmbCommPrice] = useState(0.001)
     const [embRarePrice, setEmbRarePrice] = useState(0.03)
     const [embEpicPrice, setEmbEpicPrice] = useState(0.1)
     const [embLegePrice, setEmbLegePrice] = useState(0.8)
     const [wlVouchPrice, setWlVouchPrice] = useState(0.02)
-    const [shredzPrice, setShredzPrice] = useState(0.15)
-    const [goldenTicketPrice, setGoldenTicketPrice] = useState(1.2)
+    const [shredzPrice, setShredzPrice] = useState(0.07)
+    const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.75)
     const [results, setResults] = useState([])
 
     const {data: eData, error: eError} = useSWR('/api/eventdata', fetcher);
@@ -39,7 +40,7 @@ const Home = () => {
     }, [bananaData])
 
     useEffect(() => {
-        console.log(results)
+        //console.log(results)
     }, [results])
 
     if (eError || bananaError) return <div>Failed to load</div>;
@@ -49,7 +50,7 @@ const Home = () => {
 
         return <div className="container-xxl container-fluid mt-3">
             <div className="row justify-content-between">
-                <div className="col-12 col-xl-6 col-lg-8">
+                <div className="col-12 col-lg-9">
                     <h2>Configuration</h2>
                     <div className="">
                         <Formik
@@ -57,6 +58,11 @@ const Home = () => {
                                 fuelRodRun: false,
                                 charmz: 0,
                                 teamSize: 1,
+                                vxLevel1: 1,
+                                vxLevel2: 1,
+                                vxLevel3: 1,
+                                vxLevel4: 1,
+                                vxLevel5: 1,
                                 teamLevel: 1,
                                 highestLevelKong: 1,
                                 runCount: 1,
@@ -65,13 +71,17 @@ const Home = () => {
                                 fuelRodRun: Yup.boolean(),
                                 charmz: Yup.number(),
                                 teamSize: Yup.number(),
+                                vxLevel1: Yup.number(),
+                                vxLevel2: Yup.number(),
+                                vxLevel3: Yup.number(),
+                                vxLevel4: Yup.number(),
+                                vxLevel5: Yup.number(),
                                 teamLevel: Yup.number(),
                                 highestLevelKong: Yup.number(),
                                 runCount: Yup.number(),
                             })}
                             onSubmit={(values, {setSubmitting}) => {
                                 setTimeout(() => {
-                                    console.log(eventData)
                                     let resultsFromCalc = {
                                         "Kongium": 0,
                                         "Exp": 0,
@@ -86,6 +96,46 @@ const Home = () => {
                                         "Shredz": 0,
                                         "GoldenTicket": 0,
                                     }
+
+                                    //suboptimal section, needs to be improved. maybe with array for all levels instead
+                                    //of values/selects for each
+                                    values.teamSize = Number(values.teamSize);
+                                    values.teamLevel = Number(values.vxLevel1);
+                                    values.highestLevelKong = Number(values.vxLevel1);
+                                    let kongiumGains = constants.KONGIUM_PER_LEVEL[Number(values.vxLevel1)-1];
+                                    console.log(kongiumGains)
+
+                                    if (values.teamSize > 1) {
+                                        values.teamLevel += Number(values.vxLevel2);
+                                        if (Number(values.vxLevel2) > values.highestLevelKong) {
+                                            values.highestLevelKong = Number(values.vxLevel2);
+                                        }
+                                        kongiumGains += constants.KONGIUM_PER_LEVEL[Number(values.vxLevel2)-1];
+                                    }
+                                    if (values.teamSize > 2) {
+                                        values.teamLevel += Number(values.vxLevel3);
+                                        if (Number(values.vxLevel3) > values.highestLevelKong) {
+                                            values.highestLevelKong = Number(values.vxLevel3);
+                                        }
+                                        kongiumGains += constants.KONGIUM_PER_LEVEL[Number(values.vxLevel3)-1];
+                                    }
+                                    if (values.teamSize > 3) {
+                                        values.teamLevel += Number(values.vxLevel4);
+                                        if (Number(values.vxLevel4) > values.highestLevelKong) {
+                                            values.highestLevelKong = Number(values.vxLevel4);
+                                        }
+                                        kongiumGains += constants.KONGIUM_PER_LEVEL[Number(values.vxLevel4)-1];
+
+                                    }
+                                    if (values.teamSize > 4) {
+                                        values.teamLevel += Number(values.vxLevel5);
+                                        if (Number(values.vxLevel5) > values.highestLevelKong) {
+                                            values.highestLevelKong = Number(values.vxLevel5);
+                                        }
+                                        kongiumGains += constants.KONGIUM_PER_LEVEL[Number(values.vxLevel5)-1];
+                                    }
+                                    console.log(kongiumGains)
+
                                     eventData
                                         .filter(e => values.fuelRodRun || e.eventType !== "Rod")
                                         .filter(e => Number(values.charmz) >= e.charmReq)
@@ -132,13 +182,16 @@ const Home = () => {
                                                     break;
                                             }
                                         })
+                                    resultsFromCalc.Kongium = resultsFromCalc.Kongium/100 + kongiumGains;
                                     resultsFromCalc.inputs = values;
                                     setResults(resultsFromCalc)
                                     setSubmitting(false);
                                 }, 100);
                             }}
                         >
-                            <Form>
+                            {props => (
+
+                                <Form>
                                 <Checkbox label="Fuel Rod Run" name="fuelRodRun">
                                     Using fuel rods for runs.
                                 </Checkbox>
@@ -156,67 +209,70 @@ const Home = () => {
                                     )}
                                 </Select>
 
-                                <Select label="Team Level (combined)" name="teamLevel">
-                                    <option value="5">1-5</option>
-                                    <option value="7">6-7</option>
-                                    <option value="9">8-9</option>
-                                    <option value="14">10-14</option>
-                                    <option value="15">15</option>
-                                    <option value="19">16-19</option>
-                                    <option value="29">20-29</option>
-                                    <option value="34">30-34</option>
-                                    <option value="35">35+</option>
-                                </Select>
-
-                                <Select label="Level of highest Kong" name="highestLevelKong">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="4">3-4</option>
-                                    <option value="6">5-6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8-9</option>
-                                    <option value="20">10-20</option>
-                                </Select>
+                                <h5>Levels:</h5>
+                                <div id="container-levels" className="container col-7 row justify-content-start">
+                                        {[...Array(5)].map((x, i) =>
+                                            <div className="col-2 p-0"  key={i + 1}>
+                                                {props.values.teamSize > i ?
+                                                    <Select label={`VX#` + (i+1)} name={`vxLevel` + (i+1)}>
+                                                        {[...Array(20)].map((y, j) =>
+                                                            <option key={j + 1} value={j + 1}>{j + 1}</option>
+                                                        )}
+                                                    </Select>
+                                                    : <div></div>}
+                                            </div>
+                                        )}
+                                </div>
 
                                 <Select label="Run count" name="runCount">
                                     <option value="1">1</option>
-                                    <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="25">25</option>
                                     <option value="30">30</option>
                                     <option value="50">50</option>
-                                    <option value="100">100</option>
-                                    <option value="200">200</option>
+                                    <option value="100">500</option>
+                                    <option value="1000">1000</option>
+                                    <option value="2000">2000</option>
                                 </Select>
 
                                 <button type="submit" className="btn btn-secondary">Calculate</button>
-                            </Form>
+                            </Form>)}
                         </Formik>
                     </div>
                     <hr/>
                     <div className="my-2">
-                        <h2>Results</h2>
                         {Object.keys(results).length !== 0 &&
                             <div id="results" className="row">
-                                <div className="col-12 col-sm-6">
-                                    <h5>Rewards chances for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
+                                <div className="col-4">
+                                    <h5>Rewards for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
                                     <hr/>
-                                    <div><b>Embattle Common: </b>{(results.inputs.runCount*results.EmbComm).toFixed(3)}% chance</div>
-                                    <div><b>Embattle Rare: </b>{(results.inputs.runCount*results.EmbRare).toFixed(3)}% chance</div>
-                                    <div><b>Embattle Epic: </b>{(results.inputs.runCount*results.EmbEpic).toFixed(3)}% chance</div>
-                                    <div><b>Embattle Legendary: </b>{(results.inputs.runCount*results.EmbLege).toFixed(3)}% chance</div>
-                                    <div><b>WL Voucher: </b>{(results.inputs.runCount*results.WhitelistV).toFixed(3)}% chance</div>
-                                    <div><b>Rainbow Crystal: </b>{(results.inputs.runCount*results.Rainbow).toFixed(3)}% chance</div>
-                                    <div><b>Promethean Relic: </b>{(results.inputs.runCount*results.Promethean).toFixed(3)}% chance</div>
-                                    <div><b>Shredz: </b>{(results.inputs.runCount*results.Shredz).toFixed(3)}% chance</div>
-                                    <div><b>Golden Ticket: </b>{(results.inputs.runCount*results.GoldenTicket).toFixed(3)}% chance</div>
+                                    <div><b>Embattle Common: </b>{(100*(1-Math.pow(1-results.EmbComm/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>Embattle Rare: </b>{(100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>Embattle Epic: </b>{(100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>Embattle Legendary: </b>{(100*(1-Math.pow(1-results.EmbLege/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>WL Voucher: </b>{(100*(1-Math.pow(1-results.WhitelistV/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>Cyber Fragment: </b>{(100*(1-Math.pow(1-results.Cyber/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>Rainbow Crystal: </b>{(100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>Promethean Relic: </b>{(100*(1-Math.pow(1-results.Promethean/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>Shredz: </b>{(100*(1-Math.pow(1-results.Shredz/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>Golden Ticket: </b>{(100*(1-Math.pow(1-results.GoldenTicket/100,results.inputs.runCount))).toFixed(2)}% chance</div>
+                                    <div><b>Kongium: </b>{(results.inputs.runCount*results.Kongium).toFixed(2)}</div>
+                                </div>
+                                <div className="col-4">
+                                    <h5>Costs for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
+                                    <hr/>
+                                    <div>{(results.inputs.fuelRodRun === true) ? `${results.inputs.runCount} fuel rods`
+                                        : `${results.inputs.runCount*constants.BANANA_PER_RUN} bananas or about 
+                                        ${(results.inputs.runCount*constants.BANANA_PER_RUN*bananaPrice).toFixed(5)} ether`}</div>
+                                    <hr/>
+                                    <h5>Expected loot value</h5>
+                                    Coming soon.
                                 </div>
                             </div>
                         }
-
                     </div>
                 </div>
-                <div className="col-12 col-lg-4">
+                <div className="col-12 col-lg-3">
                     <h3>Change prices:
                         <button className="btn btn-secondary" onClick={togglePrices}>Toggle</button>
                     </h3>
