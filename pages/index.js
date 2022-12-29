@@ -285,20 +285,17 @@ const Home = () => {
                                         `}
                                     </div>
                                 </div>
+                                <div className="col-12">
+                                    <hr/>
+                                    <h5>Costs for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
+                                    <hr/>
+                                    <div>{(results.inputs.fuelRodRun === true) ? `${results.inputs.runCount} fuel rods`
+                                        : `${results.inputs.runCount*constants.BANANA_PER_RUN} bananas or about 
+                                        ${(results.inputs.runCount*constants.BANANA_PER_RUN*bananaPrice).toFixed(5)} ether`}</div>
+                                    <hr/>
+                                </div>
                             </div>
                         }
-                    </div>
-                    <div className="my-2">
-                        <div className="col-12">
-                            <hr/>
-
-                            <h5>Costs for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
-                            <hr/>
-                            <div>{(results.inputs.fuelRodRun === true) ? `${results.inputs.runCount} fuel rods`
-                                : `${results.inputs.runCount*constants.BANANA_PER_RUN} bananas or about 
-                                        ${(results.inputs.runCount*constants.BANANA_PER_RUN*bananaPrice).toFixed(5)} ether`}</div>
-                            <hr/>
-                        </div>
                     </div>
                 </div>
 
