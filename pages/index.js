@@ -289,9 +289,11 @@ const Home = () => {
                                     <hr/>
                                     <h5>Costs for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
                                     <hr/>
-                                    <div>{(results.inputs.fuelRodRun === true) ? `${results.inputs.runCount} fuel rods`
-                                        : `${results.inputs.runCount*constants.BANANA_PER_RUN} bananas or about 
-                                        ${(results.inputs.runCount*constants.BANANA_PER_RUN*bananaPrice).toFixed(5)} ether`}</div>
+                                    <div>{
+                                        (results.inputs.fuelRodRun === true) ? `${results.inputs.runCount*results.inputs.teamSize} fuel rods`
+                                        : `${results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize} bananas or about 
+                                        ${(results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice).toFixed(5)} ether`
+                                    }</div>
                                     <hr/>
                                 </div>
                             </div>
