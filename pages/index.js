@@ -10,7 +10,8 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const constants = Object.freeze({
     BANANA_PER_RUN: 0.4,
-    KONGIUM_PER_LEVEL: [3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5]
+    KONGIUM_PER_LEVEL: [3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5],
+    CHARMZ_DOUBLEKONGIUM_CHANCE: [1, 1.2, 1.4, 2]
 })
 
 const Home = () => {
@@ -83,7 +84,9 @@ const Home = () => {
                             onSubmit={(values, {setSubmitting}) => {
                                 setTimeout(() => {
                                     let resultsFromCalc = {
-                                        "Kongium": 0,
+                                        "KongiumNormalGains": 0,
+                                        "KongiumBonusEvents": 0,
+                                        "KongiumCombined": 0,
                                         "Exp": 0,
                                         "Cyber": 0,
                                         "Rainbow": 0,
@@ -93,7 +96,9 @@ const Home = () => {
                                         "EmbEpic": 0,
                                         "EmbLege": 0,
                                         "WhitelistV": 0,
-                                        "Shredz": 0,
+                                        "OneShredz": 0,
+                                        "TwoShredz": 0,
+                                        "FourShredz": 0,
                                         "GoldenTicket": 0,
                                     }
 
@@ -103,7 +108,6 @@ const Home = () => {
                                     values.teamLevel = Number(values.vxLevel1);
                                     values.highestLevelKong = Number(values.vxLevel1);
                                     let kongiumGains = constants.KONGIUM_PER_LEVEL[Number(values.vxLevel1)-1];
-                                    console.log(kongiumGains)
 
                                     if (values.teamSize > 1) {
                                         values.teamLevel += Number(values.vxLevel2);
@@ -134,7 +138,8 @@ const Home = () => {
                                         }
                                         kongiumGains += constants.KONGIUM_PER_LEVEL[Number(values.vxLevel5)-1];
                                     }
-                                    console.log(kongiumGains)
+                                    resultsFromCalc.KongiumNormalGains =
+                                        kongiumGains * constants.CHARMZ_DOUBLEKONGIUM_CHANCE[Number(values.charmz)];
 
                                     eventData
                                         .filter(e => values.fuelRodRun || e.eventType !== "Rod")
@@ -145,7 +150,7 @@ const Home = () => {
                                         .forEach(e => {
                                             switch (e.rewardType) {
                                                 case "Kongium":
-                                                    resultsFromCalc.Kongium += e.chance * e.rewardAmount;
+                                                    resultsFromCalc.KongiumBonusEvents += e.chance * e.rewardAmount;
                                                     break;
                                                 case "Exp":
                                                     resultsFromCalc.Exp += e.chance * e.rewardAmount;
@@ -175,14 +180,25 @@ const Home = () => {
                                                     resultsFromCalc.WhitelistV += e.chance * e.rewardAmount;
                                                     break;
                                                 case "Shredz":
-                                                    resultsFromCalc.Shredz += e.chance * e.rewardAmount;
+                                                    switch (e.rewardAmount) {
+                                                        case 1:
+                                                            resultsFromCalc.OneShredz += e.chance * e.rewardAmount;
+                                                            break;
+                                                        case 2:
+                                                            resultsFromCalc.TwoShredz += e.chance * e.rewardAmount;
+                                                            break;
+                                                        case 4:
+                                                            resultsFromCalc.FourShredz += e.chance * e.rewardAmount;
+                                                            break;
+                                                    }
                                                     break;
                                                 case "GoldenTicket":
                                                     resultsFromCalc.GoldenTicket += e.chance * e.rewardAmount;
                                                     break;
                                             }
                                         })
-                                    resultsFromCalc.Kongium = resultsFromCalc.Kongium/100 + kongiumGains;
+                                    resultsFromCalc.KongiumBonusEvents = resultsFromCalc.KongiumBonusEvents/100;
+                                    resultsFromCalc.KongiumCombined = resultsFromCalc.KongiumBonusEvents + resultsFromCalc.KongiumNormalGains;
                                     resultsFromCalc.inputs = values;
                                     setResults(resultsFromCalc)
                                     setSubmitting(false);
@@ -243,41 +259,54 @@ const Home = () => {
                     <div className="my-2">
                         {Object.keys(results).length !== 0 &&
                             <div id="results" className="row">
-                                <div className="col-4">
+                                <div className="col-12">
                                     <h5>Rewards for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
                                     <hr/>
-                                    <div><b>Embattle Common: </b>{(100*(1-Math.pow(1-results.EmbComm/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>Embattle Rare: </b>{(100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>Embattle Epic: </b>{(100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>Embattle Legendary: </b>{(100*(1-Math.pow(1-results.EmbLege/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>WL Voucher: </b>{(100*(1-Math.pow(1-results.WhitelistV/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>Cyber Fragment: </b>{(100*(1-Math.pow(1-results.Cyber/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>Rainbow Crystal: </b>{(100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>Promethean Relic: </b>{(100*(1-Math.pow(1-results.Promethean/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>Shredz: </b>{(100*(1-Math.pow(1-results.Shredz/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>Golden Ticket: </b>{(100*(1-Math.pow(1-results.GoldenTicket/100,results.inputs.runCount))).toFixed(2)}% chance</div>
-                                    <div><b>Kongium: </b>{(results.inputs.runCount*results.Kongium).toFixed(2)}</div>
-                                </div>
-                                <div className="col-4">
-                                    <h5>Costs for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
-                                    <hr/>
-                                    <div>{(results.inputs.fuelRodRun === true) ? `${results.inputs.runCount} fuel rods`
-                                        : `${results.inputs.runCount*constants.BANANA_PER_RUN} bananas or about 
-                                        ${(results.inputs.runCount*constants.BANANA_PER_RUN*bananaPrice).toFixed(5)} ether`}</div>
-                                    <hr/>
-                                    <h5>Expected loot value</h5>
-                                    Coming soon.
+                                    <div><b>Embattle Common: </b>{(100*(1-Math.pow(1-results.EmbComm/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>Embattle Rare: </b>{(100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>Embattle Epic: </b>{(100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>Embattle Legendary: </b>{(100*(1-Math.pow(1-results.EmbLege/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>WL Voucher: </b>{(100*(1-Math.pow(1-results.WhitelistV/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>Cyber Fragment: </b>{(100*(1-Math.pow(1-results.Cyber/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>Rainbow Crystal: </b>{(100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>Promethean Relic: </b>{(100*(1-Math.pow(1-results.Promethean/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>Shredz: </b>
+                                        1x Shredz: {(100*(1-Math.pow(1-results.OneShredz/100,results.inputs.runCount))).toFixed(2)}%
+                                        2x Shredz: {(100*(1-Math.pow(1-results.TwoShredz/100,results.inputs.runCount))).toFixed(2)}%
+                                        4x Shredz: {(100*(1-Math.pow(1-results.FourShredz/100,results.inputs.runCount))).toFixed(2)}%
+                                    </div>
+                                    <div><b>Golden Ticket: </b>{(100*(1-Math.pow(1-results.GoldenTicket/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div>
+                                        <b>Kongium: </b>
+                                        {`
+                                            ${(results.inputs.runCount*results.KongiumCombined).toFixed(2)} 
+                                            (${(results.inputs.runCount*results.KongiumNormalGains).toFixed(2)} normal gains and 
+                                            ${(results.inputs.runCount*results.KongiumBonusEvents).toFixed(2)} from events)                                            
+                                        `}
+                                    </div>
                                 </div>
                             </div>
                         }
                     </div>
+                    <div className="my-2">
+                        <div className="col-12">
+                            <hr/>
+
+                            <h5>Costs for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
+                            <hr/>
+                            <div>{(results.inputs.fuelRodRun === true) ? `${results.inputs.runCount} fuel rods`
+                                : `${results.inputs.runCount*constants.BANANA_PER_RUN} bananas or about 
+                                        ${(results.inputs.runCount*constants.BANANA_PER_RUN*bananaPrice).toFixed(5)} ether`}</div>
+                            <hr/>
+                        </div>
+                    </div>
                 </div>
+
                 <div className="col-12 col-lg-3">
                     <h3>Change prices:
                         <button className="btn btn-secondary" onClick={togglePrices}>Toggle</button>
                     </h3>
                     <div id="prices">
-                        <div>Prices are not used yet in the calculations, will be in a future version.</div>
                         <Formik
                             initialValues={{
                                 nanaPrice: bananaPrice,
@@ -348,6 +377,7 @@ const Home = () => {
                         >
                             <Form>
                                 <h4>Price of loot</h4>
+                                <div>Prices for loot are not used yet, will be in a future version.</div>
                                 <TextInput
                                     label="Cyber Fragments"
                                     name="cyberPriceVal"
