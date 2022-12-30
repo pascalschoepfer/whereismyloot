@@ -182,13 +182,13 @@ const Home = () => {
                                                 case "Shredz":
                                                     switch (e.rewardAmount) {
                                                         case 1:
-                                                            resultsFromCalc.OneShredz += e.chance * e.rewardAmount;
+                                                            resultsFromCalc.OneShredz += e.chance;
                                                             break;
                                                         case 2:
-                                                            resultsFromCalc.TwoShredz += e.chance * e.rewardAmount;
+                                                            resultsFromCalc.TwoShredz += e.chance;
                                                             break;
                                                         case 4:
-                                                            resultsFromCalc.FourShredz += e.chance * e.rewardAmount;
+                                                            resultsFromCalc.FourShredz += e.chance;
                                                             break;
                                                     }
                                                     break;
