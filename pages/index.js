@@ -41,8 +41,12 @@ const Home = () => {
     }, [bananaData])
 
     useEffect(() => {
-        //console.log(results)
-    }, [results])
+        window.onclick = function(event) {
+            if (event.target === document.getElementById("prices")) {
+                document.getElementById("prices").style.display = "none";
+            }
+        }
+    })
 
     if (eError || bananaError) return <div>Failed to load</div>;
 
@@ -50,10 +54,10 @@ const Home = () => {
         let eventData = JSON.parse(eData);
 
         return <div className="container-xxl container-fluid mt-3">
-            <div className="row justify-content-between">
-                <div className="col-12 col-lg-9">
-                    <h2>Configuration</h2>
-                    <div className="">
+            <div className="justify-content-between">
+                <div className="row">
+                    <div className="mb-2">
+                        <h2>Configuration</h2>
                         <Formik
                             initialValues={{
                                 fuelRodRun: false,
@@ -240,26 +244,155 @@ const Home = () => {
                                         )}
                                 </div>
 
-                                <Select label="Run count" name="runCount">
-                                    <option value="1">1</option>
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="30">30</option>
-                                    <option value="50">50</option>
-                                    <option value="100">500</option>
-                                    <option value="1000">1000</option>
-                                    <option value="2000">2000</option>
-                                </Select>
+                                <TextInput
+                                    label="Run count"
+                                    name="runCount">
+                                </TextInput>
+                                    <br/>
 
                                 <button type="submit" className="btn btn-secondary">Calculate</button>
+                                <button className="btn btn-secondary" onClick={togglePrices}>Change prices</button>
                             </Form>)}
                         </Formik>
+                    </div>
+                    <div className="col-md-4">
+                        <div id="prices" className="custom-modal">
+                            <div className="custom-modal-content">
+                                <Formik
+                                    initialValues={{
+                                        nanaPrice: bananaPrice,
+                                    }}
+                                    validationSchema={Yup.object({
+                                        nanaPrice: Yup.number().typeError('Banana price must be a number like 0.001 -> default price from Coingecko should be ok in most cases.'),
+                                    })}
+                                    onSubmit={(values, {setSubmitting}) => {
+                                        setTimeout(() => {
+                                            setBananaPrice(Number(values.nanaPrice))
+                                            setSubmitting(false);
+                                        }, 100);
+                                    }}
+                                >
+                                    <Form>
+                                        <TextInput
+                                            label="Banana price (from Coingecko in ETH)"
+                                            name="nanaPrice"
+                                            type="text"
+                                        />
+                                        <br/>
+                                        <button type="submit" onClick={togglePrices} className="btn btn-secondary">Set own Banana price</button>
+                                        <button className="btn" onClick={togglePrices}>Cancel</button>
+                                    </Form>
+                                </Formik>
+                                <br/>
+
+                                <Formik
+                                    initialValues={{
+                                        cyberPriceVal: cyberPrice,
+                                        rainbowPriceVal: rainbowPrice,
+                                        promPriceVal: promPrice,
+                                        embCommPriceVal: embCommPrice,
+                                        embRarePriceVal: embRarePrice,
+                                        embEpicPriceVal: embEpicPrice,
+                                        embLegePriceVal: embLegePrice,
+                                        wlVouchPriceVal: wlVouchPrice,
+                                        shredzPriceVal: shredzPrice,
+                                        goldenTicketPriceVal: goldenTicketPrice,
+                                    }}
+                                    validationSchema={Yup.object({
+                                        cyberPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        rainbowPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        promPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        embCommPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        embRarePriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        embEpicPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        embLegePriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        wlVouchPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        shredzPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        goldenTicketPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                    })}
+                                    onSubmit={(values, {setSubmitting}) => {
+                                        setTimeout(() => {
+                                            setCyberPrice(Number(values.cyberPriceVal))
+                                            setRainbowPrice(Number(values.rainbowPriceVal))
+                                            setPromPrice(Number(values.promPriceVal))
+                                            setEmbCommPrice(Number(values.embCommPriceVal))
+                                            setEmbRarePrice(Number(values.embRarePriceVal))
+                                            setEmbEpicPrice(Number(values.embEpicPriceVal))
+                                            setEmbLegePrice(Number(values.embLegePriceVal))
+                                            setWlVouchPrice(Number(values.wlVouchPriceVal))
+                                            setShredzPrice(Number(values.shredzPriceVal))
+                                            setGoldenTicketPrice(Number(values.goldenTicketPriceVal))
+                                            setSubmitting(false);
+                                        }, 100);
+                                    }}
+                                >
+                                    <Form>
+                                        <h4>Price of loot</h4>
+                                        <div>Prices for loot are not used yet, will be in a future version.</div>
+                                        <TextInput
+                                            label="Cyber Fragments"
+                                            name="cyberPriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Rainbow Crystal"
+                                            name="rainbowPriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Promethean Relic"
+                                            name="promPriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Embattle Capsule Common"
+                                            name="embCommPriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Embattle Capsule Rare"
+                                            name="embRarePriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Embattle Capsule Epic"
+                                            name="embEpicPriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Embattle Capsule Legendary"
+                                            name="embLegePriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Whitelist Voucher"
+                                            name="wlVouchPriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Shredz"
+                                            name="shredzPriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Golden Ticket"
+                                            name="goldenTicketPriceVal"
+                                            type="text"
+                                        />
+                                        <br/>
+                                        <button type="submit" onClick={togglePrices} className="btn btn-secondary">Set own loot prices</button>
+                                        <button className="btn" onClick={togglePrices}>Cancel</button>
+
+                                    </Form>
+                                </Formik>
+                            </div>
+                        </div>
                     </div>
                     <hr/>
                     <div className="my-2">
                         {Object.keys(results).length !== 0 &&
                             <div id="results" className="row">
-                                <div className="col-12">
+                                <div className="col-12 col-md-4">
                                     <h5>Rewards for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
                                     <hr/>
                                     <div><b>Embattle Common: </b>{(100*(1-Math.pow(1-results.EmbComm/100,results.inputs.runCount))).toFixed(2)}%</div>
@@ -271,22 +404,20 @@ const Home = () => {
                                     <div><b>Rainbow Crystal: </b>{(100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))).toFixed(2)}%</div>
                                     <div><b>Promethean Relic: </b>{(100*(1-Math.pow(1-results.Promethean/100,results.inputs.runCount))).toFixed(2)}%</div>
                                     <div><b>Shredz: </b>
-                                        1x Shredz: {(100*(1-Math.pow(1-results.OneShredz/100,results.inputs.runCount))).toFixed(2)}%
-                                        2x Shredz: {(100*(1-Math.pow(1-results.TwoShredz/100,results.inputs.runCount))).toFixed(2)}%
-                                        4x Shredz: {(100*(1-Math.pow(1-results.FourShredz/100,results.inputs.runCount))).toFixed(2)}%
+                                        1x: {(100*(1-Math.pow(1-results.OneShredz/100,results.inputs.runCount))).toFixed(2)}%
+                                        2x: {(100*(1-Math.pow(1-results.TwoShredz/100,results.inputs.runCount))).toFixed(2)}%
+                                        4x: {(100*(1-Math.pow(1-results.FourShredz/100,results.inputs.runCount))).toFixed(2)}%
                                     </div>
                                     <div><b>Golden Ticket: </b>{(100*(1-Math.pow(1-results.GoldenTicket/100,results.inputs.runCount))).toFixed(2)}%</div>
                                     <div>
                                         <b>Kongium: </b>
                                         {`
                                             ${(results.inputs.runCount*results.KongiumCombined).toFixed(2)} 
-                                            (${(results.inputs.runCount*results.KongiumNormalGains).toFixed(2)} normal gains and 
-                                            ${(results.inputs.runCount*results.KongiumBonusEvents).toFixed(2)} from events)                                            
+                                            (${(results.inputs.runCount*results.KongiumBonusEvents).toFixed(2)} from events)                                            
                                         `}
                                     </div>
                                 </div>
-                                <div className="col-12">
-                                    <hr/>
+                                <div className="col-12 col-md-4">
                                     <h5>Costs for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
                                     <hr/>
                                     <div>{
@@ -298,140 +429,6 @@ const Home = () => {
                                 </div>
                             </div>
                         }
-                    </div>
-                </div>
-
-                <div className="col-12 col-lg-3">
-                    <h3>Change prices:
-                        <button className="btn btn-secondary" onClick={togglePrices}>Toggle</button>
-                    </h3>
-                    <div id="prices">
-                        <Formik
-                            initialValues={{
-                                nanaPrice: bananaPrice,
-                            }}
-                            validationSchema={Yup.object({
-                                nanaPrice: Yup.number().typeError('Banana price must be a number like 0.001 -> default price from Coingecko should be ok in most cases.'),
-                            })}
-                            onSubmit={(values, {setSubmitting}) => {
-                                setTimeout(() => {
-                                    setBananaPrice(Number(values.nanaPrice))
-                                    setSubmitting(false);
-                                }, 100);
-                            }}
-                        >
-                            <Form>
-                                <TextInput
-                                    label="Banana price in Ether (current price from Coingecko)"
-                                    name="nanaPrice"
-                                    type="text"
-                                />
-                                <br/>
-                                <br/>
-                                <button type="submit" className="btn btn-secondary">Set my own Banana price</button>
-                            </Form>
-                        </Formik>
-                        <br/>
-
-                        <Formik
-                            initialValues={{
-                                cyberPriceVal: cyberPrice,
-                                rainbowPriceVal: rainbowPrice,
-                                promPriceVal: promPrice,
-                                embCommPriceVal: embCommPrice,
-                                embRarePriceVal: embRarePrice,
-                                embEpicPriceVal: embEpicPrice,
-                                embLegePriceVal: embLegePrice,
-                                wlVouchPriceVal: wlVouchPrice,
-                                shredzPriceVal: shredzPrice,
-                                goldenTicketPriceVal: goldenTicketPrice,
-                            }}
-                            validationSchema={Yup.object({
-                                cyberPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                rainbowPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                promPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                embCommPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                embRarePriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                embEpicPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                embLegePriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                wlVouchPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                shredzPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                goldenTicketPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                            })}
-                            onSubmit={(values, {setSubmitting}) => {
-                                setTimeout(() => {
-                                    setCyberPrice(Number(values.cyberPriceVal))
-                                    setRainbowPrice(Number(values.rainbowPriceVal))
-                                    setPromPrice(Number(values.promPriceVal))
-                                    setEmbCommPrice(Number(values.embCommPriceVal))
-                                    setEmbRarePrice(Number(values.embRarePriceVal))
-                                    setEmbEpicPrice(Number(values.embEpicPriceVal))
-                                    setEmbLegePrice(Number(values.embLegePriceVal))
-                                    setWlVouchPrice(Number(values.wlVouchPriceVal))
-                                    setShredzPrice(Number(values.shredzPriceVal))
-                                    setGoldenTicketPrice(Number(values.goldenTicketPriceVal))
-                                    setSubmitting(false);
-                                }, 100);
-                            }}
-                        >
-                            <Form>
-                                <h4>Price of loot</h4>
-                                <div>Prices for loot are not used yet, will be in a future version.</div>
-                                <TextInput
-                                    label="Cyber Fragments"
-                                    name="cyberPriceVal"
-                                    type="text"
-                                /><br/>
-                                <TextInput
-                                    label="Rainbow Crystal"
-                                    name="rainbowPriceVal"
-                                    type="text"
-                                /><br/>
-                                <TextInput
-                                    label="Promethean Relic"
-                                    name="promPriceVal"
-                                    type="text"
-                                /><br/>
-                                <TextInput
-                                    label="Embattle Capsule Common"
-                                    name="embCommPriceVal"
-                                    type="text"
-                                /><br/>
-                                <TextInput
-                                    label="Embattle Capsule Rare"
-                                    name="embRarePriceVal"
-                                    type="text"
-                                /><br/>
-                                <TextInput
-                                    label="Embattle Capsule Epic"
-                                    name="embEpicPriceVal"
-                                    type="text"
-                                /><br/>
-                                <TextInput
-                                    label="Embattle Capsule Legendary"
-                                    name="embLegePriceVal"
-                                    type="text"
-                                /><br/>
-                                <TextInput
-                                    label="Whitelist Voucher"
-                                    name="wlVouchPriceVal"
-                                    type="text"
-                                /><br/>
-                                <TextInput
-                                    label="Shredz"
-                                    name="shredzPriceVal"
-                                    type="text"
-                                /><br/>
-                                <TextInput
-                                    label="Golden Ticket"
-                                    name="goldenTicketPriceVal"
-                                    type="text"
-                                />
-                                <br/>
-                                <br/>
-                                <button type="submit" className="btn btn-secondary">Set my own loot prices</button>
-                            </Form>
-                        </Formik>
                     </div>
                 </div>
 
@@ -450,5 +447,6 @@ const togglePrices = () => {
         x.style.display = "none";
     }
 }
+
 
 export default Home;
