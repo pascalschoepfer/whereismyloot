@@ -392,7 +392,7 @@ const Home = () => {
                     <div className="my-2">
                         {Object.keys(results).length !== 0 &&
                             <div id="results" className="row">
-                                <div className="col-12 col-md-4">
+                                <div className="col-12 col-md-4 mb-2">
                                     <h5>Rewards for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
                                     <hr/>
                                     <div><b>Embattle Common: </b>{(100*(1-Math.pow(1-results.EmbComm/100,results.inputs.runCount))).toFixed(2)}%</div>
@@ -417,7 +417,7 @@ const Home = () => {
                                         `}
                                     </div>
                                 </div>
-                                <div className="col-12 col-md-4">
+                                <div className="col-12 col-md-4 mb-2">
                                     <h5>Costs for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
                                     <hr/>
                                     <div>{
