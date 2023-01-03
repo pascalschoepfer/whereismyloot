@@ -232,7 +232,7 @@ const Home = () => {
                                 <h5>Levels:</h5>
                                 <div id="container-levels" className="container col-7 row justify-content-start">
                                         {[...Array(5)].map((x, i) =>
-                                            <div className="col-2 p-0"  key={i + 1}>
+                                            <div className="col-3 col-md-2 p-0"  key={i + 1}>
                                                 {props.values.teamSize > i ?
                                                     <Select label={`VX#` + (i+1)} name={`vxLevel` + (i+1)}>
                                                         {[...Array(20)].map((y, j) =>
