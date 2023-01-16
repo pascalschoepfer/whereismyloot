@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import TextInput from "../components/textInput";
 import Select from "../components/select";
 import Checkbox from "../components/checkbox";
-import Footer from "../components/footer";
+import Head from 'next/head';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -26,6 +26,7 @@ const Home = () => {
     const [wlVouchPrice, setWlVouchPrice] = useState(0.02)
     const [shredzPrice, setShredzPrice] = useState(0.06)
     const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.7)
+    const [kongiumPricePerBanana, setKongiumPricePerBanana] = useState(65)
     const [results, setResults] = useState([])
 
     const {data: eData, error: eError} = useSWR('/api/eventdata', fetcher);
@@ -54,8 +55,11 @@ const Home = () => {
         let eventData = JSON.parse(eData);
 
         return <div className="container-xxl container-fluid mt-3">
+            <Head>
+                <title>Where is my loot?</title>
+            </Head>
             <div className="justify-content-between">
-                <div id="mainContent" className="row">
+                <div className="row">
                     <div className="mb-3">
                         <h3>Configuration</h3>
                         <Formik
@@ -206,7 +210,6 @@ const Home = () => {
                                     resultsFromCalc.inputs = values;
                                     setResults(resultsFromCalc)
                                     console.log(resultsFromCalc)
-                                    console.log(results)
                                     setSubmitting(false);
                                 }, 100);
                             }}
@@ -299,6 +302,7 @@ const Home = () => {
                                         wlVouchPriceVal: wlVouchPrice,
                                         shredzPriceVal: shredzPrice,
                                         goldenTicketPriceVal: goldenTicketPrice,
+                                        kongiumPricePerBananaVal: kongiumPricePerBanana
                                     }}
                                     validationSchema={Yup.object({
                                         cyberPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
@@ -311,6 +315,7 @@ const Home = () => {
                                         wlVouchPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
                                         shredzPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
                                         goldenTicketPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
+                                        kongiumPricePerBananaVal: Yup.number().typeError('Price must be a number, as in Kongium per Banana'),
                                     })}
                                     onSubmit={(values, {setSubmitting}) => {
                                         setTimeout(() => {
@@ -322,13 +327,13 @@ const Home = () => {
                                             setWlVouchPrice(Number(values.wlVouchPriceVal))
                                             setShredzPrice(Number(values.shredzPriceVal))
                                             setGoldenTicketPrice(Number(values.goldenTicketPriceVal))
+                                            setKongiumPricePerBanana(Number(values.kongiumPricePerBananaVal))
                                             setSubmitting(false);
                                         }, 100);
                                     }}
                                 >
                                     <Form>
                                         <h4>Price of loot</h4>
-                                        <div>Prices for loot are not used yet, will be in a future version.</div>
                                         <TextInput
                                             label="Cyber Fragments"
                                             name="cyberPriceVal"
@@ -365,11 +370,6 @@ const Home = () => {
                                             type="text"
                                         /><br/>
                                         <TextInput
-                                            label="Whitelist Voucher"
-                                            name="wlVouchPriceVal"
-                                            type="text"
-                                        /><br/>
-                                        <TextInput
                                             label="Shredz"
                                             name="shredzPriceVal"
                                             type="text"
@@ -377,6 +377,11 @@ const Home = () => {
                                         <TextInput
                                             label="Golden Ticket"
                                             name="goldenTicketPriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
+                                            label="Kongium per banana"
+                                            name="kongiumPricePerBananaVal"
                                             type="text"
                                         />
                                         <br/>
@@ -395,17 +400,17 @@ const Home = () => {
                                 <div className="col-12 col-md-4">
                                     <h3>Rewards</h3>
                                     <hr/>
-                                    <div><b>Embattle Common: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbComm/100,results.inputs.runCount))),2)}%</div>
-                                    <div><b>Embattle Rare: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))),2)}%</div>
-                                    <div><b>Embattle Epic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))),2)}%</div>
-                                    <div><b>Embattle Legendary: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbLege/100,results.inputs.runCount))),2)}%</div>
-                                    <div><b>Cyber Fragment: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Cyber/100,results.inputs.runCount))),2)}%</div>
-                                    <div><b>Rainbow Crystal: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))),2)}%</div>
-                                    <div><b>Promethean Relic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Promethean/100,results.inputs.runCount))),2)}%</div>
+                                    <div><b>Embattle Common: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbComm/100,results.inputs.runCount))),3)}%</div>
+                                    <div><b>Embattle Rare: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))),3)}%</div>
+                                    <div><b>Embattle Epic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))),3)}%</div>
+                                    <div><b>Embattle Legendary: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbLege/100,results.inputs.runCount))),3)}%</div>
+                                    <div><b>Cyber Fragment: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Cyber/100,results.inputs.runCount))),3)}%</div>
+                                    <div><b>Rainbow Crystal: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))),3)}%</div>
+                                    <div><b>Promethean Relic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Promethean/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Shredz: </b>
-                                        1x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.OneShredz/100,results.inputs.runCount))),2)}%
-                                        2x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.TwoShredz/100,results.inputs.runCount))),2)}%
-                                        4x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.FourShredz/100,results.inputs.runCount))),2)}%
+                                        1x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.OneShredz/100,results.inputs.runCount))),3)}%
+                                        2x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.TwoShredz/100,results.inputs.runCount))),3)}%
+                                        4x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.FourShredz/100,results.inputs.runCount))),3)}%
                                     </div>
                                     <div><b>Golden Ticket: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.GoldenTicket/100,results.inputs.runCount))),2)}%</div>
                                     <div>
@@ -420,32 +425,72 @@ const Home = () => {
                                 <div className="col-12 col-md-4">
                                     <h3>Costs</h3>
                                     <hr/>
-                                    <div>{
-                                        (results.inputs.fuelRodRun === true) ?
-                                            <div><b>Fuel rods: </b>{results.inputs.runCount*results.inputs.teamSize}</div> :
-                                            <div>
-                                                <b>Bananas: </b>
-                                                {`${roundNumberToMaxDigits(results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize, 1)} 
-                                                (${roundNumberToMaxDigits(results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice, 4)} ETH)`}
-                                            </div>
-                                    }</div>
+                                    <div>
+                                        {
+                                            (results.inputs.fuelRodRun === true) ?
+                                                <div><b>Fuel rods: </b>{results.inputs.runCount*results.inputs.teamSize}</div> :
+                                                <div>
+                                                    <b>Bananas: </b>
+                                                    {`${roundNumberToMaxDigits(results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize, 1)} 
+                                                    (${roundNumberToMaxDigits(results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice, 4)} ETH)`}
+                                                </div>
+                                        }
+                                    </div>
                                     <div>
                                         {
                                             (results.inputs.charmz > 0) ?
                                                 <div>
-                                                    <div>
-                                                        <b>Charmz: </b>
-                                                        {`${calcCharmzNeedd(results.inputs.runCount)} ${constants.CHARMZ_NAMES[results.inputs.charmz]} 
-                                                        (${roundNumberToMaxDigits(calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz], 4)} ETH)`}
-                                                    </div>
-                                                    <div>
-                                                        <b>Combined: </b>
-                                                        {roundNumberToMaxDigits((results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice
-                                                        +calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz]),4)} ETH
-                                                    </div></div>
+                                                    <b>Charmz: </b>
+                                                    {`${calcCharmzNeedd(results.inputs.runCount)} ${constants.CHARMZ_NAMES[results.inputs.charmz]} 
+                                                    (${roundNumberToMaxDigits(calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz], 4)} ETH)`}
+                                                </div>
                                                 : ``
                                         }
                                     </div>
+                                    <div>
+                                        {
+                                            (results.inputs.charmz > 0 && results.inputs.fuelRodRun === false) ?
+                                                <div>
+                                                    <b>Combined: </b>
+                                                    {roundNumberToMaxDigits((results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice
+                                                        +calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz]),4)} ETH
+                                                    </div> : ``
+                                        }
+                                    </div>
+                                    <hr/>
+                                </div>
+                                <div className="col-12 col-md-4">
+                                    <h3>Expected value</h3>
+                                    <hr/>
+                                    <div><b>Embattle Common: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbComm/100*embCommPrice, 6)} ETH`}</div>
+                                    <div><b>Embattle Rare: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbRare/100*embRarePrice, 6)} ETH`}</div>
+                                    <div><b>Embattle Epic: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbEpic/100*embEpicPrice, 6)} ETH`}</div>
+                                    <div><b>Embattle Legendary: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbLege/100*embLegePrice, 6)} ETH`}</div>
+                                    <div><b>Cyber Fragment: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.Cyber/100*charmzPrices[1], 6)} ETH`}</div>
+                                    <div><b>Rainbow Crystal: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.Rainbow/100*charmzPrices[2], 6)} ETH`}</div>
+                                    <div><b>Promethean Relic: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.Promethean/100*charmzPrices[3], 6)} ETH`}</div>
+                                    <div><b>Shredz: </b>
+                                        <ul className="list-unstyled mb-1">
+                                            <li>1x: {`${roundNumberToMaxDigits(results.inputs.runCount*results.OneShredz/100*shredzPrice, 6)} ETH`}</li>
+                                            <li>2x: {`${roundNumberToMaxDigits(results.inputs.runCount*results.TwoShredz/100*shredzPrice*2, 6)} ETH`}</li>
+                                            <li>4x: {`${roundNumberToMaxDigits(results.inputs.runCount*results.FourShredz/100*shredzPrice*4, 6)} ETH`}</li>
+                                        </ul>
+                                    </div>
+                                    <div><b>Golden Ticket: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.GoldenTicket/100*goldenTicketPrice, 6)} ETH`}</div>
+                                    <div>
+                                        <b>Kongium: </b>
+                                        {`${roundNumberToMaxDigits(results.inputs.runCount*results.KongiumCombined/kongiumPricePerBanana*bananaPrice,6)} ETH`}
+                                    </div>
+                                    <div>
+                                        <b>Combined: </b>
+                                        {`
+                                            ${roundNumberToMaxDigits((results.EmbComm/100*embCommPrice+results.EmbRare/100*embRarePrice+results.EmbEpic/100*embEpicPrice+results.EmbLege/100*embLegePrice
+                                                +results.Cyber/100*charmzPrices[1]+results.Rainbow/100*charmzPrices[2]+results.Promethean/100*charmzPrices[3]
+                                                +results.OneShredz/100*shredzPrice+results.TwoShredz/100*shredzPrice*2+results.FourShredz/100*shredzPrice*4
+                                                +results.GoldenTicket/100*goldenTicketPrice+results.KongiumCombined/kongiumPricePerBanana*bananaPrice)*results.inputs.runCount,6)} ETH
+                                        `}
+                                    </div>
+
                                     <hr/>
                                 </div>
                             </div>
