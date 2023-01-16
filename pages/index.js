@@ -5,27 +5,27 @@ import * as Yup from 'yup';
 import TextInput from "../components/textInput";
 import Select from "../components/select";
 import Checkbox from "../components/checkbox";
+import Footer from "../components/footer";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const constants = Object.freeze({
     BANANA_PER_RUN: 0.4,
     KONGIUM_PER_LEVEL: [3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5],
-    CHARMZ_DOUBLEKONGIUM_CHANCE: [1, 1.2, 1.4, 2]
+    CHARMZ_DOUBLEKONGIUM_CHANCE: [1, 1.2, 1.4, 2],
+    CHARMZ_NAMES: ["None", "Cyber Fragment", "Rainbow Crystal", "Promethean Relic"]
 })
 
 const Home = () => {
     const [bananaPrice, setBananaPrice] = useState(0)
-    const [cyberPrice, setCyberPrice] = useState(0.003)
-    const [rainbowPrice, setRainbowPrice] = useState(0.025)
-    const [promPrice, setPromPrice] = useState(0.5)
-    const [embCommPrice, setEmbCommPrice] = useState(0.001)
+    const [charmzPrices, setCharmzPrices] = useState([0,0.0045, 0.03, 0.5])
+    const [embCommPrice, setEmbCommPrice] = useState(0.002)
     const [embRarePrice, setEmbRarePrice] = useState(0.03)
-    const [embEpicPrice, setEmbEpicPrice] = useState(0.1)
-    const [embLegePrice, setEmbLegePrice] = useState(0.8)
+    const [embEpicPrice, setEmbEpicPrice] = useState(0.15)
+    const [embLegePrice, setEmbLegePrice] = useState(1)
     const [wlVouchPrice, setWlVouchPrice] = useState(0.02)
-    const [shredzPrice, setShredzPrice] = useState(0.07)
-    const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.75)
+    const [shredzPrice, setShredzPrice] = useState(0.06)
+    const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.7)
     const [results, setResults] = useState([])
 
     const {data: eData, error: eError} = useSWR('/api/eventdata', fetcher);
@@ -55,9 +55,9 @@ const Home = () => {
 
         return <div className="container-xxl container-fluid mt-3">
             <div className="justify-content-between">
-                <div className="row">
-                    <div className="mb-2">
-                        <h2>Configuration</h2>
+                <div id="mainContent" className="row">
+                    <div className="mb-3">
+                        <h3>Configuration</h3>
                         <Formik
                             initialValues={{
                                 fuelRodRun: false,
@@ -205,6 +205,8 @@ const Home = () => {
                                     resultsFromCalc.KongiumCombined = resultsFromCalc.KongiumBonusEvents + resultsFromCalc.KongiumNormalGains;
                                     resultsFromCalc.inputs = values;
                                     setResults(resultsFromCalc)
+                                    console.log(resultsFromCalc)
+                                    console.log(results)
                                     setSubmitting(false);
                                 }, 100);
                             }}
@@ -217,10 +219,10 @@ const Home = () => {
                                 </Checkbox>
 
                                 <Select label="Charmz" name="charmz">
-                                    <option value={0}>None</option>
-                                    <option value={1}>Cyber Fragment</option>
-                                    <option value={2}>Rainbow Crystal</option>
-                                    <option value={3}>Promethean Relic</option>
+                                    <option value={0}>{constants.CHARMZ_NAMES[0]}</option>
+                                    <option value={1}>{constants.CHARMZ_NAMES[1]}</option>
+                                    <option value={2}>{constants.CHARMZ_NAMES[2]}</option>
+                                    <option value={3}>{constants.CHARMZ_NAMES[3]}</option>
                                 </Select>
 
                                 <Select label="Team Size" name="teamSize">
@@ -287,9 +289,9 @@ const Home = () => {
 
                                 <Formik
                                     initialValues={{
-                                        cyberPriceVal: cyberPrice,
-                                        rainbowPriceVal: rainbowPrice,
-                                        promPriceVal: promPrice,
+                                        cyberPriceVal: charmzPrices[1],
+                                        rainbowPriceVal: charmzPrices[2],
+                                        promPriceVal: charmzPrices[3],
                                         embCommPriceVal: embCommPrice,
                                         embRarePriceVal: embRarePrice,
                                         embEpicPriceVal: embEpicPrice,
@@ -312,9 +314,7 @@ const Home = () => {
                                     })}
                                     onSubmit={(values, {setSubmitting}) => {
                                         setTimeout(() => {
-                                            setCyberPrice(Number(values.cyberPriceVal))
-                                            setRainbowPrice(Number(values.rainbowPriceVal))
-                                            setPromPrice(Number(values.promPriceVal))
+                                            setCharmzPrices([0, Number(values.cyberPriceVal), Number(values.rainbowPriceVal),Number(values.promPriceVal)])
                                             setEmbCommPrice(Number(values.embCommPriceVal))
                                             setEmbRarePrice(Number(values.embRarePriceVal))
                                             setEmbEpicPrice(Number(values.embEpicPriceVal))
@@ -392,51 +392,85 @@ const Home = () => {
                     <div className="my-2">
                         {Object.keys(results).length !== 0 &&
                             <div id="results" className="row">
-                                <div className="col-12 col-md-4 mb-2">
-                                    <h5>Rewards for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
+                                <div className="col-12 col-md-4">
+                                    <h3>Rewards</h3>
                                     <hr/>
-                                    <div><b>Embattle Common: </b>{(100*(1-Math.pow(1-results.EmbComm/100,results.inputs.runCount))).toFixed(2)}%</div>
-                                    <div><b>Embattle Rare: </b>{(100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))).toFixed(2)}%</div>
-                                    <div><b>Embattle Epic: </b>{(100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))).toFixed(2)}%</div>
-                                    <div><b>Embattle Legendary: </b>{(100*(1-Math.pow(1-results.EmbLege/100,results.inputs.runCount))).toFixed(2)}%</div>
-                                    <div><b>WL Voucher: </b>{(100*(1-Math.pow(1-results.WhitelistV/100,results.inputs.runCount))).toFixed(2)}%</div>
-                                    <div><b>Cyber Fragment: </b>{(100*(1-Math.pow(1-results.Cyber/100,results.inputs.runCount))).toFixed(2)}%</div>
-                                    <div><b>Rainbow Crystal: </b>{(100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))).toFixed(2)}%</div>
-                                    <div><b>Promethean Relic: </b>{(100*(1-Math.pow(1-results.Promethean/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>Embattle Common: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbComm/100,results.inputs.runCount))),2)}%</div>
+                                    <div><b>Embattle Rare: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))),2)}%</div>
+                                    <div><b>Embattle Epic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))),2)}%</div>
+                                    <div><b>Embattle Legendary: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbLege/100,results.inputs.runCount))),2)}%</div>
+                                    <div><b>Cyber Fragment: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Cyber/100,results.inputs.runCount))),2)}%</div>
+                                    <div><b>Rainbow Crystal: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))),2)}%</div>
+                                    <div><b>Promethean Relic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Promethean/100,results.inputs.runCount))),2)}%</div>
                                     <div><b>Shredz: </b>
-                                        1x: {(100*(1-Math.pow(1-results.OneShredz/100,results.inputs.runCount))).toFixed(2)}%
-                                        2x: {(100*(1-Math.pow(1-results.TwoShredz/100,results.inputs.runCount))).toFixed(2)}%
-                                        4x: {(100*(1-Math.pow(1-results.FourShredz/100,results.inputs.runCount))).toFixed(2)}%
+                                        1x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.OneShredz/100,results.inputs.runCount))),2)}%
+                                        2x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.TwoShredz/100,results.inputs.runCount))),2)}%
+                                        4x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.FourShredz/100,results.inputs.runCount))),2)}%
                                     </div>
-                                    <div><b>Golden Ticket: </b>{(100*(1-Math.pow(1-results.GoldenTicket/100,results.inputs.runCount))).toFixed(2)}%</div>
+                                    <div><b>Golden Ticket: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.GoldenTicket/100,results.inputs.runCount))),2)}%</div>
                                     <div>
                                         <b>Kongium: </b>
                                         {`
-                                            ${(results.inputs.runCount*results.KongiumCombined).toFixed(2)} 
-                                            (${(results.inputs.runCount*results.KongiumBonusEvents).toFixed(2)} from events)                                            
+                                            ${roundNumberToMaxDigits((results.inputs.runCount*results.KongiumCombined),2)} 
+                                            (${roundNumberToMaxDigits((results.inputs.runCount*results.KongiumBonusEvents),2)} from events)                                            
                                         `}
                                     </div>
+                                    <hr/>
                                 </div>
-                                <div className="col-12 col-md-4 mb-2">
-                                    <h5>Costs for {(results.inputs.runCount === 1) ? `a single run` : `${results.inputs.runCount} runs`}</h5>
+                                <div className="col-12 col-md-4">
+                                    <h3>Costs</h3>
                                     <hr/>
                                     <div>{
-                                        (results.inputs.fuelRodRun === true) ? `${results.inputs.runCount*results.inputs.teamSize} fuel rods`
-                                        : `${results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize} bananas or about 
-                                        ${(results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice).toFixed(5)} ether`
+                                        (results.inputs.fuelRodRun === true) ?
+                                            <div><b>Fuel rods: </b>{results.inputs.runCount*results.inputs.teamSize}</div> :
+                                            <div>
+                                                <b>Bananas: </b>
+                                                {`${roundNumberToMaxDigits(results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize, 1)} 
+                                                (${roundNumberToMaxDigits(results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice, 4)} ETH)`}
+                                            </div>
                                     }</div>
+                                    <div>
+                                        {
+                                            (results.inputs.charmz > 0) ?
+                                                <div>
+                                                    <div>
+                                                        <b>Charmz: </b>
+                                                        {`${calcCharmzNeedd(results.inputs.runCount)} ${constants.CHARMZ_NAMES[results.inputs.charmz]} 
+                                                        (${roundNumberToMaxDigits(calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz], 4)} ETH)`}
+                                                    </div>
+                                                    <div>
+                                                        <b>Combined: </b>
+                                                        {roundNumberToMaxDigits((results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice
+                                                        +calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz]),4)} ETH
+                                                    </div></div>
+                                                : ``
+                                        }
+                                    </div>
                                     <hr/>
                                 </div>
                             </div>
                         }
                     </div>
                 </div>
+                <Footer/>
 
             </div>
         </div>
     }
-
     return <div>Loading...</div>
+}
+
+const roundNumberToMaxDigits = (number, digits) => {
+    return Math.round(number*Math.pow(10, digits))/Math.pow(10, digits);
+}
+
+const calcCharmzNeedd = (runCount) => {
+    if (runCount % 30 === 0) {
+        return runCount / 30;
+    }
+    else {
+        return Math.floor(runCount / 30 + 1);
+    }
 }
 
 const togglePrices = () => {
