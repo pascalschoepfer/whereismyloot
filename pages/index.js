@@ -6,6 +6,7 @@ import TextInput from "../components/textInput";
 import Select from "../components/select";
 import Checkbox from "../components/checkbox";
 import Head from 'next/head';
+import Footer from "../components/footer";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -498,6 +499,7 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     }
     return <div>Loading...</div>
