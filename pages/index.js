@@ -453,7 +453,7 @@ const Home = () => {
                                                 <div>
                                                     <b>Combined: </b>
                                                     {roundNumberToMaxDigits((results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice
-                                                        +calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz]),4)} ETH
+                                                        +calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz]),9)} ETH
                                                     </div> : ``
                                         }
                                     </div>
@@ -479,7 +479,7 @@ const Home = () => {
                                     <div><b>Golden Ticket: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.GoldenTicket/100*goldenTicketPrice, 6)} ETH`}</div>
                                     <div>
                                         <b>Kongium: </b>
-                                        {`${roundNumberToMaxDigits(results.inputs.runCount*results.KongiumCombined/kongiumPricePerBanana*bananaPrice,6)} ETH`}
+                                        {`${roundNumberToMaxDigits(results.inputs.runCount*results.KongiumCombined/kongiumPricePerBanana*bananaPrice,9)} ETH`}
                                     </div>
                                     <div>
                                         <b>Combined: </b>
