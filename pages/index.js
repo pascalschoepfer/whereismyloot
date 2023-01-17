@@ -17,7 +17,7 @@ const constants = Object.freeze({
 })
 
 const Home = () => {
-    const [bananaPrice, setBananaPrice] = useState(0)
+    const [bananaPrice, setBananaPrice] = useState(0.0004)
     const [charmzPrices, setCharmzPrices] = useState([0,0.0045, 0.03, 0.5])
     const [embCommPrice, setEmbCommPrice] = useState(0.002)
     const [embRarePrice, setEmbRarePrice] = useState(0.03)
@@ -49,7 +49,7 @@ const Home = () => {
         }
     })
 
-    if (eError || bananaError) return <div>Failed to load</div>;
+    //if (eError || bananaError) return <div>Failed to load</div>;
 
     if (bananaPrice && eData) {
         let eventData = JSON.parse(eData);
@@ -279,7 +279,7 @@ const Home = () => {
                                 >
                                     <Form>
                                         <TextInput
-                                            label="Banana price (from Coingecko in ETH)"
+                                            label="Banana price"
                                             name="nanaPrice"
                                             type="text"
                                         />
