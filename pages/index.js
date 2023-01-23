@@ -18,14 +18,14 @@ const constants = Object.freeze({
 })
 
 const Home = () => {
-    const [bananaPrice, setBananaPrice] = useState(0.0004)
-    const [charmzPrices, setCharmzPrices] = useState([0,0.0045, 0.03, 0.5])
+    const [bananaPrice, setBananaPrice] = useState(0.00036)
+    const [charmzPrices, setCharmzPrices] = useState([0,0.004, 0.03, 0.4])
     const [embCommPrice, setEmbCommPrice] = useState(0.002)
-    const [embRarePrice, setEmbRarePrice] = useState(0.03)
+    const [embRarePrice, setEmbRarePrice] = useState(0.015)
     const [embEpicPrice, setEmbEpicPrice] = useState(0.15)
     const [embLegePrice, setEmbLegePrice] = useState(1)
     const [wlVouchPrice, setWlVouchPrice] = useState(0.02)
-    const [shredzPrice, setShredzPrice] = useState(0.06)
+    const [shredzPrice, setShredzPrice] = useState(0.055)
     const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.7)
     const [kongiumPricePerBanana, setKongiumPricePerBanana] = useState(65)
     const [results, setResults] = useState([])
