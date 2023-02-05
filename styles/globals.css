@@ -16,7 +16,8 @@ a {
 }
 
 footer {
-  right: 0%;
+  font-size: smaller;
+  right: 0;
   width: 30%;
   position: fixed;
   top: 1%;
