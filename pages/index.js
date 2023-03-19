@@ -20,7 +20,6 @@ const constants = Object.freeze({
 const Home = () => {
     const [bananaPrice, setBananaPrice] = useState(0.00032)
     const [charmzPrices, setCharmzPrices] = useState([0,0.002, 0.025, 0.35])
-    const [embRarePrice, setEmbRarePrice] = useState(0.013)
     const [embEpicPrice, setEmbEpicPrice] = useState(0.13)
     const [wlVouchPrice, setWlVouchPrice] = useState(0)
     const [shredzPrice, setShredzPrice] = useState(0.05)
@@ -98,7 +97,6 @@ const Home = () => {
                                         "Cyber": 0,
                                         "Rainbow": 0,
                                         "Promethean": 0,
-                                        "EmbRare": 0,
                                         "EmbEpic": 0,
                                         "WhitelistV": 0,
                                         "OneShredz": 0,
@@ -168,9 +166,6 @@ const Home = () => {
                                                     break;
                                                 case "Promethean":
                                                     resultsFromCalc.Promethean += e.chance * e.rewardAmount;
-                                                    break;
-                                                case "EmbRare":
-                                                    resultsFromCalc.EmbRare += e.chance * e.rewardAmount;
                                                     break;
                                                 case "EmbEpic":
                                                     resultsFromCalc.EmbEpic += e.chance * e.rewardAmount;
@@ -286,7 +281,6 @@ const Home = () => {
                                         cyberPriceVal: charmzPrices[1],
                                         rainbowPriceVal: charmzPrices[2],
                                         promPriceVal: charmzPrices[3],
-                                        embRarePriceVal: embRarePrice,
                                         embEpicPriceVal: embEpicPrice,
                                         wlVouchPriceVal: wlVouchPrice,
                                         shredzPriceVal: shredzPrice,
@@ -297,7 +291,6 @@ const Home = () => {
                                         cyberPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
                                         rainbowPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
                                         promPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
-                                        embRarePriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
                                         embEpicPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
                                         wlVouchPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
                                         shredzPriceVal: Yup.number().typeError('Price must be a number, priced in $ETH.'),
@@ -307,7 +300,6 @@ const Home = () => {
                                     onSubmit={(values, {setSubmitting}) => {
                                         setTimeout(() => {
                                             setCharmzPrices([0, Number(values.cyberPriceVal), Number(values.rainbowPriceVal),Number(values.promPriceVal)])
-                                            setEmbRarePrice(Number(values.embRarePriceVal))
                                             setEmbEpicPrice(Number(values.embEpicPriceVal))
                                             setWlVouchPrice(Number(values.wlVouchPriceVal))
                                             setShredzPrice(Number(values.shredzPriceVal))
@@ -332,11 +324,6 @@ const Home = () => {
                                         <TextInput
                                             label="Promethean Relic"
                                             name="promPriceVal"
-                                            type="text"
-                                        /><br/>
-                                        <TextInput
-                                            label="Embattle Capsule Rare"
-                                            name="embRarePriceVal"
                                             type="text"
                                         /><br/>
                                         <TextInput
@@ -375,7 +362,6 @@ const Home = () => {
                                 <div className="col-12 col-md-4">
                                     <h3>Rewards</h3>
                                     <hr/>
-                                    <div><b>Embattle Rare: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Embattle Epic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Cyber Fragment: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Cyber/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Rainbow Crystal: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))),3)}%</div>
@@ -435,7 +421,6 @@ const Home = () => {
                                 <div className="col-12 col-md-4">
                                     <h3>Expected value</h3>
                                     <hr/>
-                                    <div><b>Embattle Rare: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbRare/100*embRarePrice, 6)} ETH`}</div>
                                     <div><b>Embattle Epic: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbEpic/100*embEpicPrice, 6)} ETH`}</div>
                                     <div><b>Cyber Fragment: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.Cyber/100*charmzPrices[1], 6)} ETH`}</div>
                                     <div><b>Rainbow Crystal: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.Rainbow/100*charmzPrices[2], 6)} ETH`}</div>
@@ -455,7 +440,7 @@ const Home = () => {
                                     <div>
                                         <b>Combined: </b>
                                         {`
-                                            ${roundNumberToMaxDigits((results.EmbRare/100*embRarePrice+results.EmbEpic/100*embEpicPrice
+                                            ${roundNumberToMaxDigits((results.EmbEpic/100*embEpicPrice
                                                 +results.Cyber/100*charmzPrices[1]+results.Rainbow/100*charmzPrices[2]+results.Promethean/100*charmzPrices[3]
                                                 +results.OneShredz/100*shredzPrice+results.TwoShredz/100*shredzPrice*2+results.FourShredz/100*shredzPrice*4
                                                 +results.GoldenTicket/100*goldenTicketPrice+results.KongiumCombined/kongiumPricePerBanana*bananaPrice)*results.inputs.runCount,6)} ETH
