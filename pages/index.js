@@ -18,16 +18,16 @@ const constants = Object.freeze({
 })
 
 const Home = () => {
-    const [bananaPrice, setBananaPrice] = useState(0.00036)
-    const [charmzPrices, setCharmzPrices] = useState([0,0.004, 0.03, 0.4])
+    const [bananaPrice, setBananaPrice] = useState(0.0002)
+    const [charmzPrices, setCharmzPrices] = useState([0,0.002, 0.02, 0.25])
     const [embCommPrice, setEmbCommPrice] = useState(0.002)
-    const [embRarePrice, setEmbRarePrice] = useState(0.015)
-    const [embEpicPrice, setEmbEpicPrice] = useState(0.15)
+    const [embRarePrice, setEmbRarePrice] = useState(0.01)
+    const [embEpicPrice, setEmbEpicPrice] = useState(0.1)
     const [embLegePrice, setEmbLegePrice] = useState(1)
     const [wlVouchPrice, setWlVouchPrice] = useState(0.02)
-    const [shredzPrice, setShredzPrice] = useState(0.055)
-    const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.7)
-    const [kongiumPricePerBanana, setKongiumPricePerBanana] = useState(65)
+    const [shredzPrice, setShredzPrice] = useState(0.04)
+    const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.6)
+    const [kongiumPricePerBanana, setKongiumPricePerBanana] = useState(62)
     const [results, setResults] = useState([])
 
     const {data: eData, error: eError} = useSWR('/api/eventdata', fetcher);
@@ -92,6 +92,7 @@ const Home = () => {
                             })}
                             onSubmit={(values, {setSubmitting}) => {
                                 setTimeout(() => {
+                                    console.log(values)
                                     let resultsFromCalc = {
                                         "KongiumNormalGains": 0,
                                         "KongiumBonusEvents": 0,
@@ -152,11 +153,13 @@ const Home = () => {
 
                                     eventData
                                         .filter(e => values.fuelRodRun || e.eventType !== "Rod")
+                                        .filter(e => !values.fuelRodRun || e.eventType !== "Event")
                                         .filter(e => Number(values.charmz) >= e.charmReq)
                                         .filter(e => Number(values.teamSize) >= e.teamSizeReq)
                                         .filter(e => Number(values.teamLevel) >= e.teamLvlReq)
                                         .filter(e => Number(values.highestLevelKong) >= e.lvlReq)
                                         .forEach(e => {
+                                            console.log(e)
                                             switch (e.rewardType) {
                                                 case "Kongium":
                                                     resultsFromCalc.KongiumBonusEvents += e.chance * e.rewardAmount;
