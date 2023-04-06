@@ -18,15 +18,15 @@ const constants = Object.freeze({
 })
 
 const Home = () => {
-    const [bananaPrice, setBananaPrice] = useState(0.0002)
-    const [charmzPrices, setCharmzPrices] = useState([0,0.002, 0.017, 0.3])
+    const [bananaPrice, setBananaPrice] = useState(0.00022)
+    const [charmzPrices, setCharmzPrices] = useState([0,0.0024, 0.019, 0.28])
     const [embCommPrice, setEmbCommPrice] = useState(0.0015)
-    const [embRarePrice, setEmbRarePrice] = useState(0.01)
-    const [embEpicPrice, setEmbEpicPrice] = useState(0.1)
+    const [embRarePrice, setEmbRarePrice] = useState(0.008)
+    const [embEpicPrice, setEmbEpicPrice] = useState(0.08)
     const [embLegePrice, setEmbLegePrice] = useState(1)
     const [wlVouchPrice, setWlVouchPrice] = useState(0)
-    const [shredzPrice, setShredzPrice] = useState(0.035)
-    const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.55)
+    const [shredzPrice, setShredzPrice] = useState(0.03)
+    const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.5)
     const [kongiumPricePerBanana, setKongiumPricePerBanana] = useState(60)
     const [results, setResults] = useState([])
 
@@ -408,9 +408,6 @@ const Home = () => {
                                     <div><b>Embattle Rare: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Embattle Epic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Embattle Legendary: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbLege/100,results.inputs.runCount))),3)}%</div>
-                                    <div><b>Cyber Fragment: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Cyber/100,results.inputs.runCount))),3)}%</div>
-                                    <div><b>Rainbow Crystal: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Rainbow/100,results.inputs.runCount))),3)}%</div>
-                                    <div><b>Promethean Relic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.Promethean/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Shredz: </b>
                                         1x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.OneShredz/100,results.inputs.runCount))),3)}%
                                         2x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.TwoShredz/100,results.inputs.runCount))),3)}%
@@ -445,8 +442,8 @@ const Home = () => {
                                             (results.inputs.charmz > 0) ?
                                                 <div>
                                                     <b>Charmz: </b>
-                                                    {`${calcCharmzNeedd(results.inputs.runCount)} ${constants.CHARMZ_NAMES[results.inputs.charmz]} 
-                                                    (${roundNumberToMaxDigits(calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz], 4)} ETH)`}
+                                                    {`${calcCharmzNeedd(results.inputs.runCount, results.inputs.fuelRodRun)} ${constants.CHARMZ_NAMES[results.inputs.charmz]} 
+                                                    (${roundNumberToMaxDigits(calcCharmzNeedd(results.inputs.runCount, results.inputs.fuelRodRun)*charmzPrices[results.inputs.charmz], 4)} ETH)`}
                                                 </div>
                                                 : ``
                                         }
@@ -457,7 +454,7 @@ const Home = () => {
                                                 <div>
                                                     <b>Combined: </b>
                                                     {roundNumberToMaxDigits((results.inputs.runCount*constants.BANANA_PER_RUN*results.inputs.teamSize*bananaPrice
-                                                        +calcCharmzNeedd(results.inputs.runCount)*charmzPrices[results.inputs.charmz]),9)} ETH
+                                                        +calcCharmzNeedd(results.inputs.runCount, results.inputs.fuelRodRun)*charmzPrices[results.inputs.charmz]),9)} ETH
                                                     </div> : ``
                                         }
                                     </div>
@@ -470,9 +467,6 @@ const Home = () => {
                                     <div><b>Embattle Rare: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbRare/100*embRarePrice, 6)} ETH`}</div>
                                     <div><b>Embattle Epic: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbEpic/100*embEpicPrice, 6)} ETH`}</div>
                                     <div><b>Embattle Legendary: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbLege/100*embLegePrice, 6)} ETH`}</div>
-                                    <div><b>Cyber Fragment: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.Cyber/100*charmzPrices[1], 6)} ETH`}</div>
-                                    <div><b>Rainbow Crystal: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.Rainbow/100*charmzPrices[2], 6)} ETH`}</div>
-                                    <div><b>Promethean Relic: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.Promethean/100*charmzPrices[3], 6)} ETH`}</div>
                                     <div><b>Shredz: </b>
                                         <ul className="list-unstyled mb-1">
                                             <li>1x: {`${roundNumberToMaxDigits(results.inputs.runCount*results.OneShredz/100*shredzPrice, 6)} ETH`}</li>
@@ -489,7 +483,6 @@ const Home = () => {
                                         <b>Combined: </b>
                                         {`
                                             ${roundNumberToMaxDigits((results.EmbComm/100*embCommPrice+results.EmbRare/100*embRarePrice+results.EmbEpic/100*embEpicPrice+results.EmbLege/100*embLegePrice
-                                                +results.Cyber/100*charmzPrices[1]+results.Rainbow/100*charmzPrices[2]+results.Promethean/100*charmzPrices[3]
                                                 +results.OneShredz/100*shredzPrice+results.TwoShredz/100*shredzPrice*2+results.FourShredz/100*shredzPrice*4
                                                 +results.GoldenTicket/100*goldenTicketPrice+results.KongiumCombined/kongiumPricePerBanana*bananaPrice)*results.inputs.runCount,6)} ETH
                                         `}
@@ -512,13 +505,24 @@ const roundNumberToMaxDigits = (number, digits) => {
     return Math.round(number*Math.pow(10, digits))/Math.pow(10, digits);
 }
 
-const calcCharmzNeedd = (runCount) => {
-    if (runCount % 30 === 0) {
-        return runCount / 30;
+const calcCharmzNeedd = (runCount, fuelRodRun) => {
+    if (fuelRodRun) {
+        if (runCount % 30 === 0) {
+            return runCount / 30;
+        }
+        else {
+            return Math.floor(runCount / 30 + 1);
+        }
     }
     else {
-        return Math.floor(runCount / 30 + 1);
+        if (runCount % 50 === 0) {
+            return runCount / 50;
+        }
+        else {
+            return Math.floor(runCount / 50 + 1);
+        }
     }
+
 }
 
 const togglePrices = () => {
