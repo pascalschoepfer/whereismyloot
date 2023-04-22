@@ -711,7 +711,7 @@
     "rewardAmount": 1,
     "lvlReq": 5,
     "teamLvlReq": 0,
-    "teamSizeReq": 0,
+    "teamSizeReq": 3,
     "charmReq": 1
   },
   {
@@ -744,7 +744,7 @@
     "rewardAmount": 1,
     "lvlReq": 5,
     "teamLvlReq": 0,
-    "teamSizeReq": 0,
+    "teamSizeReq": 2,
     "charmReq": 3
   }
 ]
