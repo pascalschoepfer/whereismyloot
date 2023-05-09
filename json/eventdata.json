@@ -433,7 +433,7 @@
     "eventType": "Charm",
     "rewardType": "EmbComm",
     "chance": 0.45,
-    "rewardAmount": 1,
+    "rewardAmount": 0,
     "lvlReq": 0,
     "teamLvlReq": 0,
     "teamSizeReq": 0,
