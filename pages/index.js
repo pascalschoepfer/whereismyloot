@@ -18,16 +18,16 @@ const constants = Object.freeze({
 })
 
 const Home = () => {
-    const [bananaPrice, setBananaPrice] = useState(0.0002)
-    const [charmzPrices, setCharmzPrices] = useState([0,0.002, 0.021, 0.25])
+    const [bananaPrice, setBananaPrice] = useState(0.00021)
+    const [charmzPrices, setCharmzPrices] = useState([0,0.003, 0.02, 0.25])
     const [embCommPrice, setEmbCommPrice] = useState(0.0015)
-    const [embRarePrice, setEmbRarePrice] = useState(0.008)
-    const [embEpicPrice, setEmbEpicPrice] = useState(0.08)
-    const [embLegePrice, setEmbLegePrice] = useState(1)
+    const [embRarePrice, setEmbRarePrice] = useState(0.015)
+    const [embEpicPrice, setEmbEpicPrice] = useState(0.12)
+    const [embLegePrice, setEmbLegePrice] = useState(0.9)
     const [wlVouchPrice, setWlVouchPrice] = useState(0)
-    const [shredzPrice, setShredzPrice] = useState(0.03)
-    const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.5)
-    const [kongiumPricePerBanana, setKongiumPricePerBanana] = useState(60)
+    const [shredzPrice, setShredzPrice] = useState(0.032)
+    const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.4)
+    const [kongiumPricePerBanana, setKongiumPricePerBanana] = useState(65)
     const [results, setResults] = useState([])
 
     const {data: eData, error: eError} = useSWR('/api/eventdata', fetcher);
