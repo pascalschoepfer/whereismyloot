@@ -75,7 +75,7 @@ const Home = () => {
                                 vxLevel5: 20,
                                 teamLevel: 1,
                                 highestLevelKong: 1,
-                                runCount: 1,
+                                runCount: 1000,
                             }}
                             validationSchema={Yup.object({
                                 fuelRodRun: Yup.boolean(),
