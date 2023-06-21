@@ -323,7 +323,7 @@
     "eventType": "Event",
     "rewardType": "GoldenTicket",
     "chance": 0.013,
-    "rewardAmount": 1,
+    "rewardAmount": 0,
     "lvlReq": 0,
     "teamLvlReq": 0,
     "teamSizeReq": 5,
