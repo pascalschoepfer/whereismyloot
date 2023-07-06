@@ -24,7 +24,7 @@ const Home = () => {
     const [embRarePrice, setEmbRarePrice] = useState(0.012)
     const [embEpicPrice, setEmbEpicPrice] = useState(0.1)
     const [embLegePrice, setEmbLegePrice] = useState(0.95)
-    const [wlVouchPrice, setWlVouchPrice] = useState(0)
+    const [wlVouchPrice, setWlVouchPrice] = useState(0.015)
     const [shredzPrice, setShredzPrice] = useState(0.03)
     const [goldenTicketPrice, setGoldenTicketPrice] = useState(0.4)
     const [kongiumPricePerBanana, setKongiumPricePerBanana] = useState(65)
@@ -374,6 +374,11 @@ const Home = () => {
                                             type="text"
                                         /><br/>
                                         <TextInput
+                                            label="WL Voucher"
+                                            name="wlVouchPriceVal"
+                                            type="text"
+                                        /><br/>
+                                        <TextInput
                                             label="Shredz"
                                             name="shredzPriceVal"
                                             type="text"
@@ -408,6 +413,7 @@ const Home = () => {
                                     <div><b>Embattle Rare: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbRare/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Embattle Epic: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbEpic/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Embattle Legendary: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.EmbLege/100,results.inputs.runCount))),3)}%</div>
+                                    <div><b>WL Voucher: </b>{roundNumberToMaxDigits((100*(1-Math.pow(1-results.WhitelistV/100,results.inputs.runCount))),3)}%</div>
                                     <div><b>Shredz: </b>
                                         1x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.OneShredz/100,results.inputs.runCount))),3)}%
                                         2x: {roundNumberToMaxDigits((100*(1-Math.pow(1-results.TwoShredz/100,results.inputs.runCount))),3)}%
@@ -467,6 +473,7 @@ const Home = () => {
                                     <div><b>Embattle Rare: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbRare/100*embRarePrice, 6)} ETH`}</div>
                                     <div><b>Embattle Epic: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbEpic/100*embEpicPrice, 6)} ETH`}</div>
                                     <div><b>Embattle Legendary: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.EmbLege/100*embLegePrice, 6)} ETH`}</div>
+                                    <div><b>WL Voucher: </b>{`${roundNumberToMaxDigits(results.inputs.runCount*results.WhitelistV/100*wlVouchPrice, 6)} ETH`}</div>
                                     <div><b>Shredz: </b>
                                         <ul className="list-unstyled mb-1">
                                             <li>1x: {`${roundNumberToMaxDigits(results.inputs.runCount*results.OneShredz/100*shredzPrice, 6)} ETH`}</li>
@@ -483,6 +490,7 @@ const Home = () => {
                                         <b>Combined: </b>
                                         {`
                                             ${roundNumberToMaxDigits((results.EmbComm/100*embCommPrice+results.EmbRare/100*embRarePrice+results.EmbEpic/100*embEpicPrice+results.EmbLege/100*embLegePrice
+                                                +results.WhitelistV/100*wlVouchPrice
                                                 +results.OneShredz/100*shredzPrice+results.TwoShredz/100*shredzPrice*2+results.FourShredz/100*shredzPrice*4
                                                 +results.GoldenTicket/100*goldenTicketPrice+results.KongiumCombined/kongiumPricePerBanana*bananaPrice)*results.inputs.runCount,6)} ETH
                                         `}

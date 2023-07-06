@@ -8,7 +8,7 @@ const Footer = () => {
             {` Made with !ooh by deltron.eth `}
             <FontAwesomeIcon icon={faHeart}/>
             <br/>
-            {` Updated with season 40 changes. `}
+            {` Updated with season 47 changes. `}
         </footer>
     )
 }

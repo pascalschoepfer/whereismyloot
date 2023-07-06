@@ -301,7 +301,7 @@
     "eventType": "Event",
     "rewardType": "EmbLege",
     "chance": 0.003,
-    "rewardAmount": 1,
+    "rewardAmount": 0,
     "lvlReq": 0,
     "teamLvlReq": 0,
     "teamSizeReq": 5,
@@ -338,6 +338,17 @@
     "lvlReq": 15,
     "teamLvlReq": 45,
     "teamSizeReq": 3,
+    "charmReq": 0
+  },
+  {
+    "name": "Charlie's Coconut",
+    "eventType": "Event",
+    "rewardType": "WhitelistV",
+    "chance": 0.6,
+    "rewardAmount": 0,
+    "lvlReq": 0,
+    "teamLvlReq": 0,
+    "teamSizeReq": 0,
     "charmReq": 0
   },
   {
@@ -407,22 +418,11 @@
     "charmReq": 1
   },
   {
-    "name": "Charlie's Coconut",
-    "eventType": "Charm",
-    "rewardType": "WhitelistV",
-    "chance": 0.125,
-    "rewardAmount": 1,
-    "lvlReq": 0,
-    "teamLvlReq": 0,
-    "teamSizeReq": 0,
-    "charmReq": 1
-  },
-  {
     "name": "The Fishing Pond",
     "eventType": "Charm",
     "rewardType": "WhitelistV",
     "chance": 0.5,
-    "rewardAmount": 1,
+    "rewardAmount": 0,
     "lvlReq": 0,
     "teamLvlReq": 0,
     "teamSizeReq": 0,
@@ -597,12 +597,12 @@
     "name": "The Banana Split",
     "eventType": "Rod",
     "rewardType": "WhitelistV",
-    "chance": 0.3,
+    "chance": 1.5,
     "rewardAmount": 1,
     "lvlReq": 0,
     "teamLvlReq": 0,
     "teamSizeReq": 0,
-    "charmReq": 1
+    "charmReq": 0
   },
   {
     "name": "Beginner's Luck",
