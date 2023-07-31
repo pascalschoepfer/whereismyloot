@@ -598,7 +598,7 @@
     "eventType": "Rod",
     "rewardType": "WhitelistV",
     "chance": 1.5,
-    "rewardAmount": 1,
+    "rewardAmount": 0,
     "lvlReq": 0,
     "teamLvlReq": 0,
     "teamSizeReq": 0,
